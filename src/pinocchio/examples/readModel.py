@@ -1,6 +1,4 @@
 import pinocchio as pin 
-import numpy as np
-
 from pinocchio.robot_wrapper import RobotWrapper
 from pathlib import Path
 
@@ -22,5 +20,3 @@ print("Names of Joints:", list(model.names))
 
 print("# of Frames:", model.nframes)
 print("Names of Frames:", [f.name for f in model.frames[:model.nframes]])
-
-
