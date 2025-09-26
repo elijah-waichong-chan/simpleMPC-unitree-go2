@@ -14,15 +14,17 @@ robot = RobotWrapper.BuildFromURDF(
 model = robot.model
 data  = model.createData()
 
-# Forward Kinematic Code Below
-
+# Desired generalized coordinate
 q = pin.neutral(model)  # q = 0
 
+# Compute the joint pose
 pin.forwardKinematics(model, data, q)
+# Update the frame pose
 pin.updateFramePlacements(model, data)
 
 
-# Now you can query the placement of a joint or frame:
+# Now the joint and frame pose have been updated
 frame_id = model.getFrameId("FL_hip_joint")
-joint_id = model.getFrameId("FL_hip_joint")
-print("Placement:\n", data.oMf[frame_id])
+joint_id = model.getJointId("FL_hip_joint")
+print("Frame Placement:\n", data.oMf[frame_id])
+print("Joint Placement:\n", data.oMi[joint_id])
