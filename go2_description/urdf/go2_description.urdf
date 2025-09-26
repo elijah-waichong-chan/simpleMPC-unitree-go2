@@ -27,7 +27,7 @@ Stephen Brawner (brawner@gmail.com)
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://GO2_URDF/dae/base.dae" />
+          filename="package://go2_description/dae/base.dae" />
       </geometry>
       <material
         name="">
