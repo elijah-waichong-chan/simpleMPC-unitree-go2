@@ -1,11 +1,9 @@
-import pinocchio as pin 
 from pinocchio.robot_wrapper import RobotWrapper
 from pathlib import Path
 
 repo = Path(__file__).resolve().parents[3]
 urdf_path = repo / "go2_description" / "urdf" / "go2_description.urdf"  # confirm this name
 
-# Use package_dirs (list), not mesh_dir, for package:// URIs
 robot = RobotWrapper.BuildFromURDF(
     str(urdf_path),
     package_dirs=[str(repo)]   # repo contains the folder "GO2_URDF/"

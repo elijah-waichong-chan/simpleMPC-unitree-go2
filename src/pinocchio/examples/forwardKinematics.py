@@ -26,20 +26,19 @@ vdata  = pin.GeometryData(vmodel)
 cdata  = pin.GeometryData(cmodel)
 
 # Desired generalized coordinate
-x, y, z, =  0, 0, 1
-qx, qy, qz, qw = 0, 0, 0, 1
-theta1, theta2, theta3 = 0, 0, 0 
-theta4, theta5, theta6 = 0, 0, 0 
-theta7, theta8, theta9 = 0, 0, 0 
-theta10, theta11, theta12 = 0, 0, 0 
+x, y, z, =  0, 0, 1                     # base position (m)
+qx, qy, qz, qw = 0, 0, 0, 1             # base orientation  (quaternion)
+theta1, theta2, theta3 = 0, 0, 0        # leg 1 joint angle (rad)
+theta4, theta5, theta6 = 0, 0, 0        # leg 2 joint angle (rad)
+theta7, theta8, theta9 = 0, 0, 0        # leg 3 joint angle (rad)
+theta10, theta11, theta12 = 0, 0, 0     # leg 4 joint angle (rad)
 
-
-q = np.array([x, y, z,                      # base position
-             qx, qy, qz, qw,                 # base orientation  (quaternion)
-             theta1, theta2, theta3,
-             theta4, theta5, theta6,
-             theta7, theta8, theta9,
-             theta10, theta11, theta12])    # leg joints
+q = np.array([x, y, z,                      
+              qx, qy, qz, qw,                 
+              theta1, theta2, theta3,
+              theta4, theta5, theta6,
+              theta7, theta8, theta9,
+              theta10, theta11, theta12]) 
 
 #q = pin.neutral(model).copy()
 
