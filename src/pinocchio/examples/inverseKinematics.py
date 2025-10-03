@@ -35,7 +35,8 @@ def go2InverseKinematics(leg: str, p_des_H: np.array):
     eps = 0.1
     IT_MAX = 1000
     step = 0.2
-    damp = 0.000001
+    damp = 1e-7
+
 
     baseID = model.getFrameId("base")
     footID = model.getFrameId(f"{leg}_foot")
@@ -94,6 +95,8 @@ def go2InverseKinematics(leg: str, p_des_H: np.array):
 
     if success:
         print("Convergence achieved!")
+        print(f"\nresult: {q.flatten().tolist()}")
+        print(f"\nfinal error: {e_pos_H.T}")
     else:
         print(
             "\n"
@@ -101,13 +104,13 @@ def go2InverseKinematics(leg: str, p_des_H: np.array):
             "to the desired precision"
         )
 
+
     return q
 
-    print(f"\nresult: {q.flatten().tolist()}")
-    print(f"\nfinal error: {e_pos_H.T}")
 
 
-qnew = go2InverseKinematics("FL", np.array([0.2, 0.142, -0.2]))
+
+qnew = go2InverseKinematics("FL", np.array([0.2, 0.22, -0.15]))
 
 # Visualization in Meshcat
 viz = MeshcatVisualizer(model, cmodel, vmodel)
