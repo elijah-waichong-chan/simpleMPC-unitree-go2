@@ -3,10 +3,7 @@ from pinocchio.robot_wrapper import RobotWrapper
 from pathlib import Path
 
 import numpy as np
-from numpy.linalg import norm, solve
-
-import time
-from pinocchio.visualize import MeshcatVisualizer
+from vis_mujoco import visualize
 
 repo = Path(__file__).resolve().parents[3]
 urdf_path = repo / "go2_description" / "urdf" / "go2_description.urdf"
@@ -15,7 +12,7 @@ urdf_path = repo / "go2_description" / "urdf" / "go2_description.urdf"
 robot = RobotWrapper.BuildFromURDF(
     str(urdf_path),
     package_dirs=[str(repo)],
-    #root_joint=pin.JointModelFreeFlyer()
+    root_joint=pin.JointModelFreeFlyer()
 )
 
 model = robot.model
@@ -27,9 +24,8 @@ vdata  = pin.GeometryData(vmodel)
 cdata  = pin.GeometryData(cmodel)
 
 
-def go2InverseKinematics(leg: str, p_des_H: np.array):
+def go2InverseKinematics(leg: str, p_des_H: np.array, q0):
     
-    q0 = pin.neutral(model)
     q = q0
 
     eps = 0.1
@@ -87,10 +83,6 @@ def go2InverseKinematics(leg: str, p_des_H: np.array):
         #print(f"{i}: delta = {delta_q_leg.T}")
         q[qcols] = q[qcols] + step * delta_q_leg
 
-        # qmin = model.lowerPositionLimit
-        # qmax = model.upperPositionLimit
-        # q[qcols] = np.minimum(np.maximum(q[qcols], qmin[qcols]), qmax[qcols])
-
         i += 1
 
     if success:
@@ -107,20 +99,27 @@ def go2InverseKinematics(leg: str, p_des_H: np.array):
 
     return q
 
+# Test Code
+
+# Set initial guess
+x, y, z, =  0, 0, 0.45                  # base position (m)
+qx, qy, qz, qw = 0, 0, 0, 1             # base orientation  (quaternion)
+theta1, theta2, theta3 = 0, 0, 0        # leg 1 joint angle (rad)
+theta4, theta5, theta6 = 0, 0, 0        # leg 2 joint angle (rad)
+theta7, theta8, theta9 = 0, 0, 0        # leg 3 joint angle (rad)
+theta10, theta11, theta12 = 0, 0, 0     # leg 4 joint angle (rad)
+
+q0 = np.array([x, y, z,                      
+               qx, qy, qz, qw,                 
+               theta1, theta2, theta3,
+               theta4, theta5, theta6,
+               theta7, theta8, theta9,
+               theta10, theta11, theta12], dtype=float) 
+print(q0)
 
 
+# Compute IK
+qnew = go2InverseKinematics("FL", np.array([0.2, 0.22, -0.15]), q0)
 
-qnew = go2InverseKinematics("FL", np.array([0.2, 0.22, -0.15]))
-
-# Visualization in Meshcat
-viz = MeshcatVisualizer(model, cmodel, vmodel)
-viz.initViewer()          # starts a local meshcat server
-viz.loadViewerModel()     # resolves package:// URIs via package_dirs
-
-viz.display(qnew)
-viz.displayVisuals(True)       # toggle visual meshes
-viz.displayCollisions(False)   # toggle collision shapes
-
-# Keep the viewer alive
-while True:
-    time.sleep(0.1)
+# Visualize with Mujoco
+visualize(model, qnew)
