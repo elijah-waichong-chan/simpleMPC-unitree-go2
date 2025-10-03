@@ -1,8 +1,8 @@
-# quaternion in xyzw <-> rpy helpers
 import numpy as np
 import pinocchio as pin
 
 def euler_to_quad(roll, pitch, yaw):
+
     cr,sr = np.cos(roll/2), np.sin(roll/2)
     cp,sp = np.cos(pitch/2), np.sin(pitch/2)
     cy,sy = np.cos(yaw/2), np.sin(yaw/2)
