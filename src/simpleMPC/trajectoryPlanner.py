@@ -17,6 +17,7 @@ def generateConstantTraj(state: RigidBodyState,
 
     trajectory = RigidBodyTraj()
 
+    trajectory.time = t_vec
     trajectory.x_pos_ref = state.x_pos + x_vel * t_vec
     trajectory.x_vel_ref = np.full(N, x_vel, dtype=float)
     trajectory.y_pos_ref = state.y_pos + y_vel * t_vec
