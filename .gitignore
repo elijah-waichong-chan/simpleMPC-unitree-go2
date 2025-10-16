@@ -2,5 +2,6 @@
 /go2_description/
 /unitree_mujoco/
 /mujoco/
-/src/pinocchio/examples/__pycache__
 /.vscode/
+/src/pinocchioFunctions/__pycache__
+/src/simpleMPC/examples/__pycache__
