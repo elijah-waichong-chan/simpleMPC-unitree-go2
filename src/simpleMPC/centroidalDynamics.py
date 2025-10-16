@@ -15,9 +15,8 @@ pin.ccrba(model, data, q, v)
 # Compute the necessary model constants
 
 m = data.Ig.mass
-lever = data.Ig.lever
 I_com = data.Ig.inertia
-g = 9.81
+g = np.array([0, 0, -9.81])
 
 print("Robot Mass(kg):", m)
 print("I_CoM:", I_com)
