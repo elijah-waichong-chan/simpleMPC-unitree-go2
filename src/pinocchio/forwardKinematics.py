@@ -3,7 +3,7 @@ from pinocchio.robot_wrapper import RobotWrapper
 from pathlib import Path
 
 import numpy as np
-from vis_mujoco import visualize
+from pinocchio.vis_mujoco import visualize
 
 repo = Path(__file__).resolve().parents[3]
 urdf_path = repo / "go2_description" / "urdf" / "go2_description.urdf"
