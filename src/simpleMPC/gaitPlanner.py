@@ -2,7 +2,7 @@ import numpy as np
 
 def walkGait(frequency_hz: float,
              duty: float,
-             time_step: int,
+             time_step: float,
              time_now: float,
              time_horizon: float) -> np.ndarray:
     
