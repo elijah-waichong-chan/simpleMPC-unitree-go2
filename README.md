@@ -1,2 +1,2 @@
-# rl_go2
-Reinforcement Learning Project with a GO2 Quadrupled Robotic Dog
+# Motion Control of Unitree Go2 Quadruped Robot
+Implementing MPC and RL controller on a GO2 Quadrupled Robot
