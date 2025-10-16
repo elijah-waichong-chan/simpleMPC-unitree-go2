@@ -4,4 +4,4 @@
 /mujoco/
 /.vscode/
 /src/pinocchioFunctions/__pycache__
-/src/simpleMPC/examples/__pycache__
+/src/simpleMPC/__pycache__
