@@ -4,7 +4,7 @@ import mujoco.viewer
 from pathlib import Path
 
 # Set this to your MJCF file directory
-repo = Path(__file__).resolve().parents[3]
+repo = Path(__file__).resolve().parents[2]
 scene_path = repo / "unitree_mujoco" / "unitree_robots" / "go2" / "scene.xml"
 
 

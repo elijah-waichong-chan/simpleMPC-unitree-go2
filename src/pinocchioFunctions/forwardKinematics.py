@@ -1,27 +1,9 @@
 import pinocchio as pin 
-from pinocchio.robot_wrapper import RobotWrapper
-from pathlib import Path
-
 import numpy as np
-from pinocchio.vis_mujoco import visualize
+from vis_mujoco import visualize
+from readURDF import createFloatingBaseModel
 
-repo = Path(__file__).resolve().parents[3]
-urdf_path = repo / "go2_description" / "urdf" / "go2_description.urdf"
-
-# Create the Unitree Go2 Robot Object
-robot = RobotWrapper.BuildFromURDF(
-    str(urdf_path),
-    package_dirs=[str(repo)],
-    root_joint=pin.JointModelFreeFlyer()
-)
-
-model = robot.model
-vmodel = robot.visual_model
-cmodel = robot.collision_model
-
-data  = model.createData()
-vdata  = pin.GeometryData(vmodel)
-cdata  = pin.GeometryData(cmodel)
+model, data, vmodel, vdata, cmodel, cdata  = createFloatingBaseModel()
 
 # Desired generalized coordinate
 x, y, z, =  0, 0, 0                     # base position (m)

@@ -4,24 +4,9 @@ from pathlib import Path
 
 import numpy as np
 from vis_mujoco import visualize
+from readURDF import createFloatingBaseModel
 
-repo = Path(__file__).resolve().parents[3]
-urdf_path = repo / "go2_description" / "urdf" / "go2_description.urdf"
-
-# Create the Unitree Go2 Robot Object
-robot = RobotWrapper.BuildFromURDF(
-    str(urdf_path),
-    package_dirs=[str(repo)],
-    root_joint=pin.JointModelFreeFlyer()
-)
-
-model = robot.model
-vmodel = robot.visual_model
-cmodel = robot.collision_model
-
-data  = model.createData()
-vdata  = pin.GeometryData(vmodel)
-cdata  = pin.GeometryData(cmodel)
+model, data, vmodel, vdata, cmodel, cdata  = createFloatingBaseModel()
 
 
 def go2InverseKinematics(leg: str, p_des_H: np.array, q0):
