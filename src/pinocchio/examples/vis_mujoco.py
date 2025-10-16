@@ -1,22 +1,18 @@
 import numpy as np
 import mujoco
 import mujoco.viewer
-
-import pinocchio as pin 
-
 from pathlib import Path
 
+# Set this to your MJCF file directory
 repo = Path(__file__).resolve().parents[3]
 scene_path = repo / "unitree_mujoco" / "unitree_robots" / "go2" / "scene.xml"
 
 
-# Load the MuJoCo model (MJCF recommended)
+# Load the MuJoCo model
 m = mujoco.MjModel.from_xml_path(str(scene_path))
 d = mujoco.MjData(m)
 
-print("nq, nv, nu:", m.nq, m.nv, m.nu)   # quick sanity
-
-
+# Helper function to convert between pinocchio and mujoco coordinates
 def pin_to_mj_qpos(m, pin_model, q_pin):
     """
     Map a Pinocchio configuration q_pin into MuJoCo's d.qpos order.
@@ -58,6 +54,7 @@ def pin_to_mj_qpos(m, pin_model, q_pin):
 
     return qpos
 
+# visualization call
 def visualize(pin_model, pin_q):
     d.qpos[:] = pin_to_mj_qpos(m, pin_model, pin_q)
     print(d.qpos) 

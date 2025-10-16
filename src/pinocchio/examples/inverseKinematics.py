@@ -118,6 +118,7 @@ q0 = np.array([x, y, z,
 print(q0)
 
 
+
 # Compute IK
 qnew = go2InverseKinematics("FL", np.array([0.2, 0.22, -0.15]), q0)
 
