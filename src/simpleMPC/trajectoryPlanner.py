@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 from robot_classes import RigidBodyState
 from robot_classes import RigidBodyTraj
 
@@ -43,8 +42,7 @@ def generateConstantTraj(state: RigidBodyState,
                  frequency: float,
                  duty: float) -> RigidBodyTraj:
     
-    N = int(np.ceil(time_horizon / time_step)) # number of sequences to output
-    print(N)
+    N = int(time_horizon / time_step) # number of sequences to output
     t_vec = np.arange(N) * time_step # time vector
 
     trajectory = RigidBodyTraj()
@@ -159,17 +157,4 @@ def generateConstantTraj(state: RigidBodyState,
     trajectory.rl_foot_placement_vec = r_rl_vec
     trajectory.rr_foot_placement_vec = r_rr_vec
 
-
     return trajectory
-
-# Test Code
-state = RigidBodyState()
-traj = generateConstantTraj(state, 0, 0.5, 0, 0, 0.1, 5, 0.6, 0.7)
-
-plt.figure(figsize=(8, 6))
-plt.plot(traj.x_pos_ref, traj.y_pos_ref)
-plt.plot(traj.fl_foot_placement[0,:], traj.fl_foot_placement[1,:], 'o')
-plt.plot(traj.fr_foot_placement[0,:], traj.fr_foot_placement[1,:], 'o')
-plt.plot(traj.rl_foot_placement[0,:], traj.rl_foot_placement[1,:], 'o')
-plt.plot(traj.rr_foot_placement[0,:], traj.rr_foot_placement[1,:], 'o')
-plt.show()
