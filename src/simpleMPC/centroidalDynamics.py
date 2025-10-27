@@ -4,7 +4,7 @@ from numpy import sin, cos
 
 from robot_classes import RigidBodyState
 from robot_classes import RigidBodyTraj
-from readURDF import createFloatingBaseModel
+from pinocchioFunctions.readURDF import createFloatingBaseModel
 from trajectoryPlanner import generateConstantTraj
 from scipy.signal import cont2discrete
 
@@ -18,6 +18,10 @@ pin.forwardKinematics(model, data, q)
 pin.updateFramePlacements(model, data)
 pin.ccrba(model, data, q, v) 
 
+m = data.Ig.mass
+I_world = data.Ig.inertia
+I_inv = np.linalg.inv(I_world)
+
 def skew(vector):
     if vector.shape != (3,):
         raise ValueError("Input vector must be a 3-element array.")
@@ -30,10 +34,6 @@ def skew(vector):
 
 def continuousDynamics(state: RigidBodyState,
                        traj: RigidBodyTraj):
-    
-    m = data.Ig.mass
-    I_world = data.Ig.inertia
-    I_inv = np.linalg.inv(I_world)
     
     g = np.array([
         [0],
