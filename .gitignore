@@ -1,7 +1,4 @@
 /build/
-/go2_description/
-/unitree_mujoco/
-/mujoco/
 /.vscode/
 /src/pinocchioFunctions/__pycache__
 /src/simpleMPC/__pycache__
