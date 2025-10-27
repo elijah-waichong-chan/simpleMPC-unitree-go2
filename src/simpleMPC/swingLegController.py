@@ -7,9 +7,6 @@ from pinocchioFunctions.inverseKinematics import go2InverseKinematics
 import pinocchio as pin 
 model, data, vmodel, vdata, cmodel, cdata  = createFloatingBaseModel()
 
-pin.forwardKinematics(model, data, q)
-pin.updateFramePlacements(model, data)
-
 def computeFootJacobian(leg: str, r_i):
 
     config = ConfigurationState()   
