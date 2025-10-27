@@ -1,5 +1,5 @@
 /build/
 /.vscode/
-/src/pinocchioFunctions/__pycache__
+/src/simpleMPC/pinocchioFunctions/__pycache__
 /src/simpleMPC/__pycache__
 /Miniconda3-latest-MacOSX-arm64.sh
