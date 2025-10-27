@@ -2,12 +2,12 @@ import numpy as np
 from robot_classes import RigidBodyState
 from robot_classes import RigidBodyTraj
 
-from readURDF import createFloatingBaseModel
-from readURDF import getFootPlacement
-from readURDF import getHipOffset
+from pinocchioFunctions.readURDF import createFloatingBaseModel
+from pinocchioFunctions.readURDF import getFootPlacement
+from pinocchioFunctions.readURDF import getHipOffset
 import pinocchio as pin 
 
-def walkGait(frequency_hz: float,
+def Gait(frequency_hz: float,
              duty: float,
              time_step: float,
              time_now: float,
@@ -17,7 +17,7 @@ def walkGait(frequency_hz: float,
     t = time_now + np.arange(N) * time_step # time vector
     T = 1 / frequency_hz # Perioid
 
-    phase_offset = np.array([0.00, 0.25, 0.50, 0.75])  # FL, FR, RL, RR
+    phase_offset = np.array([0.0, 0.5, 0.5, 0.0])
     
     phases = np.mod(t[None, :] / T + phase_offset[:, None], 1.0)
     C = (phases < duty).astype(np.int32)  # 4 x N
@@ -74,7 +74,7 @@ def generateConstantTraj(state: RigidBodyState,
     pin.centerOfMass(model, data)
     com_world = data.com[0]
 
-    schedule= walkGait(frequency, duty, time_step, 0, time_horizon)
+    schedule= Gait(frequency, duty, time_step, 0, time_horizon)
     print(schedule)
 
     r_fl = np.zeros((3,N))
