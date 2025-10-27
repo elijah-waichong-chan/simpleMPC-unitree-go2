@@ -1,5 +1,30 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import numpy as np
+
+
+@dataclass
+class ConfigurationState:
+    x_pos: float = 0.0
+    y_pos: float = 0.0
+    z_pos: float = 0.3
+
+    qx: float = 0.0
+    qy: float = 0.0
+    qz: float = 0.0
+    qw: float = 1.0
+
+    theta1, theta2, theta3 = 1, 0, 0        # leg 1 joint angle (rad)
+    theta4, theta5, theta6 = 0, 0, 0        # leg 2 joint angle (rad)
+    theta7, theta8, theta9 = 0, 0, 0        # leg 3 joint angle (rad)
+    theta10, theta11, theta12 = 0, 0, 0     # leg 4 joint angle (rad)
+
+    q: np.ndarray = field(default_factory=lambda: np.array(
+        [1.0, 0.0, 0.0,   # leg 1
+         0.0, 0.0, 0.0,   # leg 2
+         0.0, 0.0, 0.0,   # leg 3
+         0.0, 0.0, 0.0],  # leg 4
+        dtype=float
+    ))
 
 @dataclass
 class RigidBodyState:
