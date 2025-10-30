@@ -1,31 +1,61 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import numpy as np
 
 
 @dataclass
 class ConfigurationState:
-    x_pos: float = 0.0
-    y_pos: float = 0.0
-    z_pos: float = 0.3
-
+    x: float = 0.0
+    y: float = 0.0
+    z: float = 0.27
     qx: float = 0.0
     qy: float = 0.0
     qz: float = 0.0
     qw: float = 1.0
+    theta1: float = 0.0
+    theta2: float = 0.9
+    theta3: float = -1.8
+    theta4: float = 0.0
+    theta5: float = 0.9
+    theta6: float = -1.8
+    theta7: float = 0.0
+    theta8: float = 0.9
+    theta9: float = -1.8
+    theta10: float = 0.0
+    theta11: float = 0.9
+    theta12: float = -1.8
 
-    theta1, theta2, theta3 = 1, 0, 0        # leg 1 joint angle (rad)
-    theta4, theta5, theta6 = 0, 0, 0        # leg 2 joint angle (rad)
-    theta7, theta8, theta9 = 0, 0, 0        # leg 3 joint angle (rad)
-    theta10, theta11, theta12 = 0, 0, 0     # leg 4 joint angle (rad)
+    
+    def compute_q(self):
+        q = np.array([self.x, self.y, self.z,                      
+                    self.qx, self.qy, self.qz, self.qw,                 
+                    self.theta1, self.theta2, self.theta3,
+                    self.theta4, self.theta5, self.theta6,
+                    self.theta7, self.theta8, self.theta9,
+                    self.theta10, self.theta11, self.theta12], dtype=float) 
+        return q
 
-    q: np.ndarray = field(default_factory=lambda: np.array(
-        [1.0, 0.0, 0.0,   # leg 1
-         0.0, 0.0, 0.0,   # leg 2
-         0.0, 0.0, 0.0,   # leg 3
-         0.0, 0.0, 0.0],  # leg 4
-        dtype=float
-    ))
+    def update_config(self, q):
+        self.x = q[0]
+        self.y = q[1]
+        self.z = q[2]
+        self.qx = q[3]
+        self.qy = q[4]
+        self.qz = q[5]
+        self.qw = q[6]
+        self.theta1 = q[7]
+        self.theta2 = q[8]
+        self.theta3 = q[9]
+        self.theta4 = q[10]
+        self.theta5 = q[11]
+        self.theta6 = q[12]
+        self.theta7 = q[13]
+        self.theta8 = q[14]
+        self.theta9 = q[15]
+        self.theta10 = q[16]
+        self.theta11 = q[17]
+        self.theta12 = q[18]
 
+     
 @dataclass
 class RigidBodyState:
     x_pos: float = 0.0
