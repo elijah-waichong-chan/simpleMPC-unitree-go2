@@ -4,7 +4,7 @@ import pinocchio as pin
 from robot_classes import ConfigurationState
 import numpy as np
 
-class Go2Model:
+class Pin_Go2_Model:
 
     def __init__(self):
         # Locate URDF relative to this file
@@ -27,11 +27,11 @@ class Go2Model:
         self.data = self.model.createData()
 
         # Initial configuration
-        config = ConfigurationState()
-        q_init = config.compute_q()
+        self.config = ConfigurationState()
+        self.q_init = self.config.compute_q()
 
         # Forward kinematics / frame placements at q_init
-        pin.forwardKinematics(self.model, self.data, q_init)
+        pin.forwardKinematics(self.model, self.data, self.q_init)
         pin.updateFramePlacements(self.model, self.data)
 
         # Define a fixed "my_world" frame coincident with the current base pose
@@ -78,19 +78,15 @@ class Go2Model:
         self.RL_hip_offset = wMh3.translation.copy()
         self.RR_hip_offset = wMh4.translation.copy()
 
+        self.current_config = ConfigurationState()
 
 
-    def test(self):
-        oMb = self.data.oMf[self.base_id]
-        p_ob = oMb.translation.copy() 
-        return p_ob                        
-
-    def get_foot_placement_in_world(self, config: ConfigurationState):
-
-        q = config.compute_q()
-
+    def update_model(self, q):
+        self.current_config.update_config(q)
         pin.forwardKinematics(self.model, self.data, q)
-        pin.updateFramePlacements(self.model, self.data)
+        pin.updateFramePlacements(self.model, self.data)                    
+
+    def get_foot_placement_in_world(self):
 
         oMw = self.data.oMf[self.my_world_id]
         oMf1 = self.data.oMf[self.FL_foot_id]
@@ -103,7 +99,6 @@ class Go2Model:
         wMf3 = oMw.actInv(oMf3)
         wMf4 = oMw.actInv(oMf4)
 
-
         FL_placement = wMf1.translation.copy()
         FR_placement = wMf2.translation.copy()
         RL_placement = wMf3.translation.copy()
@@ -111,12 +106,7 @@ class Go2Model:
 
         return FL_placement, FR_placement, RL_placement, RR_placement
     
-    def get_foot_placement_in_body(self, config: ConfigurationState):
-
-        q = config.compute_q()
-
-        pin.forwardKinematics(self.model, self.data, q)
-        pin.updateFramePlacements(self.model, self.data)
+    def get_foot_placement_in_body(self):
 
         oMb = self.data.oMf[self.base_id]
         oMf1 = self.data.oMf[self.FL_foot_id]
@@ -136,9 +126,32 @@ class Go2Model:
 
         return FL_placement, FR_placement, RL_placement, RR_placement
     
-    def inverse_kinematics(self, leg: str, p_des_H: np.array, config: ConfigurationState):
+
+    def computeFootJacobian(self, leg: str):
+
+        q = self.current_config.compute_q()
+        footID = self.model.getFrameId(f"{leg}_foot")
+
+        oMb = self.data.oMf[self.base_id]
+
+        J_world = pin.computeFrameJacobian(self.model, self.data, q, footID, pin.ReferenceFrame.WORLD)
+        J_pos_world = J_world[:3,:]
+        J_pos_base = oMb.rotation.T @ J_pos_world
+
+        joint_ids  = [self.model.getJointId(f"{leg}_hip_joint"), 
+                      self.model.getJointId(f"{leg}_thigh_joint"), 
+                      self.model.getJointId(f"{leg}_calf_joint")]
+
+        vcols = [self.model.joints[jid].idx_v for jid in joint_ids]
+
+        J_leg_pos_base = J_pos_base[:, vcols] 
+
+        return J_leg_pos_base
+
     
-        q = config.compute_q()
+    def inverse_kinematics(self, leg: str, p_des_H: np.array):
+    
+        q = self.current_config.compute_q()
 
         eps = 0.1
         IT_MAX = 1000
@@ -163,7 +176,7 @@ class Go2Model:
             #print(f"{i}: pos = {p_now_H.T}")
 
             e_pos_H = p_des_H - p_now_H
-            print(f"{i}: error = {e_pos_H.T}")
+            #print(f"{i}: error = {e_pos_H.T}")
 
             if np.linalg.norm(e_pos_H) < eps:
                 success = True
@@ -174,7 +187,7 @@ class Go2Model:
 
             J_world = pin.computeFrameJacobian(self.model, self.data, q, footID, pin.ReferenceFrame.WORLD)
             J_pos_world = J_world[:3,:]
-            J_pos_hip = oMb.rotation.T @ J_pos_world
+            J_pos_base = oMb.rotation.T @ J_pos_world
 
             joint_ids  = [self.model.getJointId(f"{leg}_hip_joint"), 
                           self.model.getJointId(f"{leg}_thigh_joint"), 
@@ -184,7 +197,7 @@ class Go2Model:
             qcols = [self.model.joints[jid].idx_q for jid in joint_ids]
             #print(qcols)
 
-            J_leg = J_pos_hip[:, vcols] 
+            J_leg = J_pos_base[:, vcols] 
 
             H = J_leg.T @ J_leg + (damp**2) * np.eye(J_leg.shape[1])
             delta_q_leg = np.linalg.solve(H, J_leg.T @ e_pos_H)
@@ -194,9 +207,9 @@ class Go2Model:
             i += 1
 
         if success:
-            print("Convergence achieved!")
-            print(f"\nresult: {q.flatten().tolist()}")
-            print(f"\nfinal error: {e_pos_H.T}")
+            print(f"IK Convergence achieved for {leg} foot!")
+            #print(f"\nresult: {q.flatten().tolist()}")
+            #print(f"\nfinal error: {e_pos_H.T}")
         else:
             print(
                 "\n"
@@ -204,9 +217,8 @@ class Go2Model:
                 "to the desired precision"
             )
 
-        config.update_config(q)
+        self.update_model(q)
 
-        return config
 
 
 
