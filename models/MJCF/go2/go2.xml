@@ -105,7 +105,9 @@
               type="cylinder" class="collision" />
             <geom pos="0 0 -0.213" mesh="foot" class="visual" material="black" />
             <geom name="FL" class="foot" />
-            <body name="FL_foot" pos="0 0 -0.213" />
+            <body name="FL_foot" pos="0 0 -0.213">
+              <site name="FL_foot_site" pos="0 0 0" size="0.01"/>
+            </body>
           </body>
         </body>
       </body>
@@ -140,7 +142,9 @@
               type="cylinder" class="collision" />
             <geom pos="0 0 -0.213" mesh="foot" class="visual" material="black" />
             <geom name="FR" class="foot" />
-            <body name="FR_foot" pos="0 0 -0.213" />
+            <body name="FR_foot" pos="0 0 -0.213">
+              <site name="FR_foot_site" pos="0 0 0" size="0.01"/>
+            </body>
           </body>
         </body>
       </body>
@@ -175,7 +179,9 @@
               type="cylinder" class="collision" />
             <geom pos="0 0 -0.213" mesh="foot" class="visual" material="black" />
             <geom name="RL" class="foot" />
-            <body name="RL_foot" pos="0 0 -0.213" />
+            <body name="RL_foot" pos="0 0 -0.213">
+              <site name="RL_foot_site" pos="0 0 0" size="0.01"/>
+            </body>
           </body>
         </body>
       </body>
@@ -212,7 +218,9 @@
               type="cylinder" class="collision" />
             <geom pos="0 0 -0.213" mesh="foot" class="visual" material="black" />
             <geom name="RR" class="foot" />
-            <body name="RR_foot" pos="0 0 -0.213" />
+            <body name="RR_foot" pos="0 0 -0.213">
+              <site name="RR_foot_site" pos="0 0 0" size="0.01"/>
+            </body>
           </body>
         </body>
       </body>
@@ -273,6 +281,11 @@
     <jointactuatorfrc name="RL_hip_torque" joint="RL_hip_joint" noise="0.01" />
     <jointactuatorfrc name="RL_thigh_torque" joint="RL_thigh_joint" noise="0.01" />
     <jointactuatorfrc name="RL_calf_torque" joint="RL_calf_joint" noise="0.01" />
+
+    <touch name="FL_touch" site="FL_foot_site"/>
+    <touch name="FR_touch" site="FR_foot_site"/>
+    <touch name="RL_touch" site="RL_foot_site"/>
+    <touch name="RR_touch" site="RR_foot_site"/>
 
     <framequat name="imu_quat" objtype="site" objname="imu" />
     <gyro name="imu_gyro" site="imu" />
