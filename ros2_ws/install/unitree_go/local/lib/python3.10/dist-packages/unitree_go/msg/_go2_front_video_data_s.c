@@ -1,0 +1,1 @@
+/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_go/rosidl_generator_py/unitree_go/msg/_go2_front_video_data_s.c

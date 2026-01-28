@@ -1,0 +1,1 @@
+/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_hg/rosidl_generator_py/unitree_hg/msg/_bms_cmd_s.c

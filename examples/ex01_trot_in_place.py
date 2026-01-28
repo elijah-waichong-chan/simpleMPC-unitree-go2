@@ -12,6 +12,7 @@ from convex_mpc.go2_robot_data import PinGo2Model
 from convex_mpc.mujoco_model import MuJoCo_GO2_Model
 from convex_mpc.com_trajectory import ComTraj
 from convex_mpc.centroidal_mpc import CentroidalMPC
+# from convex_mpc.centroidal_mpc_condensed import CondensedCentroidalMPC
 from convex_mpc.leg_controller import LegController
 from convex_mpc.gait import Gait
 from convex_mpc.plot_helper import plot_mpc_result, plot_swing_foot_traj, plot_solve_time, hold_until_all_fig_closed
@@ -174,6 +175,8 @@ traj.generate_traj(
     time_step=MPC_DT,
 )
 mpc = CentroidalMPC(go2, traj)
+# mpc = CondensedCentroidalMPC(go2, traj)
+
 
 # Safe defaults until first solve
 U_opt = np.zeros((12, traj.N), dtype=float)
@@ -234,8 +237,13 @@ for k in range(SIM_STEPS):
 
             N = traj.N
             w_opt = sol["x"].full().flatten()
+
             X_opt = w_opt[: 12 * (N)].reshape((12, N), order="F")
             U_opt = w_opt[12 * (N) :].reshape((12, N), order="F")
+
+            # U_opt = w_opt.reshape((12, N), order="F")
+            # X_opt = None  # not directly available from solver output
+
 
         # Extract first GRF from MPC
         mpc_force_world[:, ctrl_i] = U_opt[:, 0]

@@ -1,0 +1,203 @@
+[0.010s] Invoking command in '/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_ros2_example': AMENT_PREFIX_PATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api:/opt/ros/humble LD_LIBRARY_PATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg/lib:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go/lib:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/home/elijah/convex-mpc-unitree-go2/third_party/acados/lib PYTHONPATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg/local/lib/python3.10/dist-packages:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go/local/lib/python3.10/dist-packages:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example
+[0.059s] -- The C compiler identification is GNU 11.4.0
+[0.105s] -- The CXX compiler identification is GNU 11.4.0
+[0.111s] -- Detecting C compiler ABI info
+[0.171s] -- Detecting C compiler ABI info - done
+[0.176s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.176s] -- Detecting C compile features
+[0.176s] -- Detecting C compile features - done
+[0.178s] -- Detecting CXX compiler ABI info
+[0.246s] -- Detecting CXX compiler ABI info - done
+[0.251s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.252s] -- Detecting CXX compile features
+[0.252s] -- Detecting CXX compile features - done
+[0.254s] -- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.368s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.417s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[0.439s] -- Found unitree_go: 0.0.0 (/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go/share/unitree_go/cmake)
+[0.469s] -- Found rosidl_generator_c: 3.1.7 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.474s] -- Found rosidl_adapter: 3.1.7 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.480s] -- Found rosidl_generator_cpp: 3.1.7 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.490s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.502s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.541s] -- Found unitree_hg: 0.0.0 (/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg/share/unitree_hg/cmake)
+[0.550s] -- Found unitree_api: 0.0.0 (/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake)
+[0.569s] -- Found rclcpp: 16.0.15 (/opt/ros/humble/share/rclcpp/cmake)
+[0.609s] -- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.612s] -- Found rmw_fastrtps_cpp: 6.2.8 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[0.697s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  
+[0.721s] -- Found FastRTPS: /opt/ros/humble/include  
+[0.757s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.766s] -- Looking for pthread.h
+[0.830s] -- Looking for pthread.h - found
+[0.830s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[0.896s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+[0.897s] -- Found Threads: TRUE  
+[0.934s] -- Found rosbag2_cpp: 0.15.15 (/opt/ros/humble/share/rosbag2_cpp/cmake)
+[1.005s] -- Found yaml-cpp version 0.7.0
+[1.009s] -- Found ament_lint_auto: 0.12.14 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[1.075s] -- Added test 'copyright' to check source files copyright and LICENSE
+[1.080s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[1.082s] -- Configured cppcheck include dirs: /home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/include;/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/include/common;/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/include/nlohmann
+[1.082s] -- Configured cppcheck exclude dirs and/or files: 
+[1.088s] -- Added test 'cpplint' to check C / C++ code against the Google style
+[1.088s] -- Configured cpplint exclude dirs and/or files: 
+[1.090s] -- Added test 'lint_cmake' to check CMake code style
+[1.096s] -- Added test 'uncrustify' to check C / C++ code style
+[1.096s] -- Configured uncrustify additional arguments: 
+[1.097s] -- Added test 'xmllint' to check XML markup files
+[1.098s] -- Configuring done
+[1.181s] -- Generating done
+[1.208s] -- Build files have been written to: /home/elijah/go2-convex-mpc/ros2_ws/build/unitree_ros2_example
+[1.222s] Invoked command in '/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_ros2_example' returned '0': AMENT_PREFIX_PATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api:/opt/ros/humble LD_LIBRARY_PATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg/lib:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go/lib:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/home/elijah/convex-mpc-unitree-go2/third_party/acados/lib PYTHONPATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg/local/lib/python3.10/dist-packages:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go/local/lib/python3.10/dist-packages:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example
+[1.223s] Invoking command in '/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_ros2_example': AMENT_PREFIX_PATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api:/opt/ros/humble LD_LIBRARY_PATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg/lib:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go/lib:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/home/elijah/convex-mpc-unitree-go2/third_party/acados/lib PYTHONPATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg/local/lib/python3.10/dist-packages:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go/local/lib/python3.10/dist-packages:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/elijah/go2-convex-mpc/ros2_ws/build/unitree_ros2_example -- -j16 -l16
+[1.291s] [  3%] [32mBuilding CXX object CMakeFiles/low_level_ctrl.dir/src/low_level_ctrl.cpp.o[0m
+[1.291s] [  3%] [32mBuilding CXX object CMakeFiles/low_level_ctrl_hg.dir/src/h1-2/lowlevel/low_level_ctrl_hg.cpp.o[0m
+[1.291s] [  5%] [32mBuilding CXX object CMakeFiles/go2_sport_client.dir/src/go2/go2_sport_client.cpp.o[0m
+[1.291s] [  6%] [32mBuilding CXX object CMakeFiles/read_motion_state.dir/src/read_motion_state.cpp.o[0m
+[1.291s] [  8%] [32mBuilding CXX object CMakeFiles/read_low_state.dir/src/read_low_state.cpp.o[0m
+[1.292s] [ 10%] [32mBuilding CXX object CMakeFiles/go2_stand_example.dir/src/go2/go2_stand_example.cpp.o[0m
+[1.292s] [ 12%] [32mBuilding CXX object CMakeFiles/g1_arm_action_example.dir/src/g1/high_level/g1_arm_action_example.cpp.o[0m
+[1.292s] [ 15%] [32mBuilding CXX object CMakeFiles/g1_ankle_swing_example.dir/src/g1/lowlevel/g1_ankle_swing_example.cpp.o[0m
+[1.292s] [ 15%] [32mBuilding CXX object CMakeFiles/go2_robot_state_client.dir/src/go2/go2_robot_state_client.cpp.o[0m
+[1.292s] [ 17%] [32mBuilding CXX object CMakeFiles/read_low_state_hg.dir/src/read_low_state_hg.cpp.o[0m
+[1.292s] [ 18%] [32mBuilding CXX object CMakeFiles/g1_arm_sdk_dds_example.dir/src/g1/high_level/g1_arm_sdk_dds_example.cpp.o[0m
+[1.292s] [ 22%] [32mBuilding CXX object CMakeFiles/g1_loco_client_example.dir/src/g1/high_level/loco_client_example.cpp.o[0m
+[1.292s] [ 22%] [32mBuilding CXX object CMakeFiles/g1_dex3_example.dir/src/g1/dex3/g1_dex3_example.cpp.o[0m
+[1.293s] [ 24%] [32mBuilding CXX object CMakeFiles/read_wireless_controller.dir/src/read_wireless_controller.cpp.o[0m
+[1.295s] [ 25%] [32mBuilding CXX object CMakeFiles/g1_low_level_example.dir/src/g1/lowlevel/g1_low_level_example.cpp.o[0m
+[1.299s] [ 27%] [32mBuilding CXX object CMakeFiles/g1_audio_client_example.dir/src/g1/audio_client/g1_audio_client_example.cpp.o[0m
+[1.468s] In file included from [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/src/g1/high_level/g1_arm_action_example.cpp:11[m[K:
+[1.469s] [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/include/common/ut_errror.hpp:13:59:[m[K [01;35m[Kwarning: [m[Kbackslash-newline at end of file
+[1.469s]    13 | #define UT_PRINT_ERR(code, error)                         \
+[1.469s]       |                                                            
+[1.784s] In file included from [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/include/common/base_client.hpp:11[m[K,
+[1.785s]                  from [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/include/g1/g1_loco_client.hpp:10[m[K,
+[1.786s]                  from [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/src/g1/high_level/loco_client_example.cpp:3[m[K:
+[1.786s] [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/include/common/ut_errror.hpp:13:59:[m[K [01;35m[Kwarning: [m[Kbackslash-newline at end of file
+[1.788s]    13 | #define UT_PRINT_ERR(code, error)                         \
+[1.789s]       |                                                            
+[1.800s] In file included from [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/include/common/base_client.hpp:11[m[K,
+[1.800s]                  from [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/include/g1/g1_audio_client.hpp:6[m[K,
+[1.801s]                  from [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/src/g1/audio_client/g1_audio_client_example.cpp:11[m[K:
+[1.802s] [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/include/common/ut_errror.hpp:13:59:[m[K [01;35m[Kwarning: [m[Kbackslash-newline at end of file
+[1.803s]    13 | #define UT_PRINT_ERR(code, error)                         \
+[1.803s]       |                                                            
+[8.675s] [ 29%] [32mBuilding CXX object CMakeFiles/low_level_ctrl.dir/src/common/motor_crc.cpp.o[0m
+[14.848s] [ 31%] [32m[1mLinking CXX executable low_level_ctrl[0m
+[15.282s] [ 32%] [32m[1mLinking CXX executable read_wireless_controller[0m
+[15.403s] [ 34%] [32m[1mLinking CXX executable read_low_state_hg[0m
+[15.620s] [ 36%] [32m[1mLinking CXX executable read_low_state[0m
+[15.767s] [ 37%] [32m[1mLinking CXX executable read_motion_state[0m
+[16.027s] [ 39%] [32mBuilding CXX object CMakeFiles/low_level_ctrl_hg.dir/src/common/motor_crc_hg.cpp.o[0m
+[16.124s] [ 39%] Built target low_level_ctrl
+[16.174s] [ 41%] [32mBuilding CXX object CMakeFiles/b2w_sport_client.dir/src/b2w/b2w_sport_client.cpp.o[0m
+[16.280s] [ 43%] [32mBuilding CXX object CMakeFiles/g1_low_level_example.dir/src/common/motor_crc_hg.cpp.o[0m
+[16.593s] [ 43%] Built target read_low_state_hg
+[16.611s] [ 44%] [32mBuilding CXX object CMakeFiles/g1_loco_client_example.dir/src/common/motor_crc.cpp.o[0m
+[16.628s] [ 44%] Built target read_wireless_controller
+[16.644s] [ 46%] [32mBuilding CXX object CMakeFiles/go2_sport_client.dir/src/common/ros2_sport_client.cpp.o[0m
+[16.811s] [ 46%] Built target read_low_state
+[16.840s] [ 48%] [32mBuilding CXX object CMakeFiles/g1_dex3_example.dir/src/common/motor_crc.cpp.o[0m
+[16.842s] [ 48%] Built target read_motion_state
+[16.857s] [ 50%] [32mBuilding CXX object CMakeFiles/go2_stand_example.dir/src/common/motor_crc.cpp.o[0m
+[17.510s] [ 51%] [32mBuilding CXX object CMakeFiles/g1_arm_sdk_dds_example.dir/src/common/motor_crc.cpp.o[0m
+[17.557s] [ 53%] [32mBuilding CXX object CMakeFiles/g1_arm_action_example.dir/src/common/motor_crc.cpp.o[0m
+[18.507s] [ 55%] [32mBuilding CXX object CMakeFiles/g1_ankle_swing_example.dir/src/common/motor_crc_hg.cpp.o[0m
+[20.286s] [ 56%] [32mBuilding CXX object CMakeFiles/b2w_sport_client.dir/src/common/ros2_b2_sport_client.cpp.o[0m
+[20.537s] [ 58%] [32mBuilding CXX object CMakeFiles/go2_robot_state_client.dir/src/common/motor_crc.cpp.o[0m
+[20.683s] [ 60%] [32m[1mLinking CXX executable g1_audio_client_example[0m
+[21.475s] [ 62%] [32mBuilding CXX object CMakeFiles/b2w_stand_example.dir/src/b2w/b2w_stand_example.cpp.o[0m
+[21.651s] [ 63%] [32m[1mLinking CXX executable g1_low_level_example[0m
+[21.811s] [ 65%] [32mBuilding CXX object CMakeFiles/b2w_stand_example.dir/src/common/motor_crc.cpp.o[0m
+[21.888s] [ 67%] [32m[1mLinking CXX executable low_level_ctrl_hg[0m
+[21.911s] [ 67%] Built target g1_audio_client_example
+[21.972s] [ 68%] [32mBuilding CXX object CMakeFiles/b2_stand_example.dir/src/b2/b2_stand_example.cpp.o[0m
+[21.995s] In file included from [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/include/common/b2_base_client.hpp:16[m[K,
+[21.995s]                  from [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/include/b2/b2_motion_switch_client.hpp:11[m[K,
+[21.996s]                  from [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/src/b2w/b2w_stand_example.cpp:11[m[K:
+[21.997s] [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/include/common/ut_errror.hpp:13:59:[m[K [01;35m[Kwarning: [m[Kbackslash-newline at end of file
+[22.001s]    13 | #define UT_PRINT_ERR(code, error)                         \
+[22.002s]       |                                                            
+[22.410s] [ 70%] [32mBuilding CXX object CMakeFiles/b2_sport_client.dir/src/b2/b2_sport_client.cpp.o[0m
+[22.461s] [ 72%] [32m[1mLinking CXX executable g1_loco_client_example[0m
+[22.500s] In file included from [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/include/common/b2_base_client.hpp:16[m[K,
+[22.500s]                  from [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/include/b2/b2_motion_switch_client.hpp:11[m[K,
+[22.500s]                  from [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/src/b2/b2_stand_example.cpp:11[m[K:
+[22.500s] [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/include/common/ut_errror.hpp:13:59:[m[K [01;35m[Kwarning: [m[Kbackslash-newline at end of file
+[22.500s]    13 | #define UT_PRINT_ERR(code, error)                         \
+[22.500s]       |                                                            
+[22.851s] [ 72%] Built target g1_low_level_example
+[22.867s] [ 74%] [32m[1mLinking CXX executable g1_dex3_example[0m
+[22.869s] [ 75%] [32mBuilding CXX object CMakeFiles/b2_sport_client.dir/src/common/ros2_b2_sport_client.cpp.o[0m
+[22.878s] [ 75%] Built target low_level_ctrl_hg
+[22.901s] [ 77%] [32mBuilding CXX object CMakeFiles/b2_stand_example.dir/src/common/motor_crc.cpp.o[0m
+[22.929s] [ 79%] [32m[1mLinking CXX executable go2_stand_example[0m
+[23.474s] [ 81%] [32m[1mLinking CXX executable g1_arm_action_example[0m
+[23.539s] [ 82%] [32m[1mLinking CXX executable g1_arm_sdk_dds_example[0m
+[24.210s] [ 82%] Built target g1_loco_client_example
+[24.273s] [ 84%] [32mBuilding CXX object CMakeFiles/g1_dual_arm_example.dir/src/g1/lowlevel/g1_dual_arm_example.cpp.o[0m
+[24.279s] [ 84%] Built target go2_stand_example
+[24.300s] [ 86%] [32mBuilding CXX object CMakeFiles/g1_dual_arm_example.dir/src/common/motor_crc_hg.cpp.o[0m
+[24.364s] [ 86%] Built target g1_dex3_example
+[24.494s] [ 87%] [32m[1mLinking CXX executable g1_ankle_swing_example[0m
+[24.714s] [ 87%] Built target g1_arm_sdk_dds_example
+[24.829s] In file included from [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/include/common/base_client.hpp:11[m[K,
+[24.830s]                  from [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/include/g1/g1_motion_switch_client.hpp:11[m[K,
+[24.830s]                  from [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/src/g1/lowlevel/g1_dual_arm_example.cpp:18[m[K:
+[24.830s] [01m[K/home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/example/src/include/common/ut_errror.hpp:13:59:[m[K [01;35m[Kwarning: [m[Kbackslash-newline at end of file
+[24.830s]    13 | #define UT_PRINT_ERR(code, error)                         \
+[24.830s]       |                                                            
+[24.861s] [ 87%] Built target g1_arm_action_example
+[25.661s] [ 87%] Built target g1_ankle_swing_example
+[26.093s] [ 89%] [32m[1mLinking CXX executable go2_robot_state_client[0m
+[27.046s] [ 89%] Built target go2_robot_state_client
+[28.817s] [ 91%] [32m[1mLinking CXX executable b2w_sport_client[0m
+[29.044s] [ 91%] Built target b2w_sport_client
+[30.154s] [ 93%] [32m[1mLinking CXX executable b2_sport_client[0m
+[30.365s] [ 93%] Built target b2_sport_client
+[31.788s] [ 94%] [32m[1mLinking CXX executable go2_sport_client[0m
+[32.406s] [ 94%] Built target go2_sport_client
+[36.781s] [ 96%] [32m[1mLinking CXX executable b2_stand_example[0m
+[36.929s] [ 98%] [32m[1mLinking CXX executable b2w_stand_example[0m
+[37.293s] [ 98%] Built target b2_stand_example
+[37.418s] [ 98%] Built target b2w_stand_example
+[38.128s] [100%] [32m[1mLinking CXX executable g1_dual_arm_example[0m
+[38.594s] [100%] Built target g1_dual_arm_example
+[38.610s] Invoked command in '/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_ros2_example' returned '0': AMENT_PREFIX_PATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api:/opt/ros/humble LD_LIBRARY_PATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg/lib:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go/lib:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/home/elijah/convex-mpc-unitree-go2/third_party/acados/lib PYTHONPATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg/local/lib/python3.10/dist-packages:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go/local/lib/python3.10/dist-packages:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/elijah/go2-convex-mpc/ros2_ws/build/unitree_ros2_example -- -j16 -l16
+[38.613s] Invoking command in '/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_ros2_example': AMENT_PREFIX_PATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api:/opt/ros/humble LD_LIBRARY_PATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg/lib:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go/lib:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/home/elijah/convex-mpc-unitree-go2/third_party/acados/lib PYTHONPATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg/local/lib/python3.10/dist-packages:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go/local/lib/python3.10/dist-packages:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/elijah/go2-convex-mpc/ros2_ws/build/unitree_ros2_example
+[38.620s] -- Install configuration: ""
+[38.621s] -- Execute custom install script
+[38.622s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example//low_level_ctrl
+[38.629s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example//low_level_ctrl_hg
+[38.636s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example//g1_low_level_example
+[38.643s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example//read_low_state
+[38.651s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example//read_low_state_hg
+[38.658s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example//read_motion_state
+[38.664s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example//read_wireless_controller
+[38.671s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example//go2_sport_client
+[38.678s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example//go2_stand_example
+[38.686s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example//go2_robot_state_client
+[38.694s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example//g1_arm_sdk_dds_example
+[38.703s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example//g1_arm_action_example
+[38.711s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example//g1_dex3_example
+[38.719s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example//g1_loco_client_example
+[38.727s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example//g1_ankle_swing_example
+[38.736s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example//g1_dual_arm_example
+[38.744s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example//g1_audio_client_example
+[38.752s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example/share/ament_index/resource_index/package_run_dependencies/unitree_ros2_example
+[38.761s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example/share/ament_index/resource_index/parent_prefix_path/unitree_ros2_example
+[38.770s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example/share/unitree_ros2_example/environment/ament_prefix_path.sh
+[38.778s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example/share/unitree_ros2_example/environment/ament_prefix_path.dsv
+[38.785s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example/share/unitree_ros2_example/environment/path.sh
+[38.793s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example/share/unitree_ros2_example/environment/path.dsv
+[38.802s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example/share/unitree_ros2_example/local_setup.bash
+[38.810s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example/share/unitree_ros2_example/local_setup.sh
+[38.817s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example/share/unitree_ros2_example/local_setup.zsh
+[38.824s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example/share/unitree_ros2_example/local_setup.dsv
+[38.832s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example/share/unitree_ros2_example/package.dsv
+[38.839s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example/share/ament_index/resource_index/packages/unitree_ros2_example
+[38.847s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example/share/unitree_ros2_example/cmake/unitree_ros2_exampleConfig.cmake
+[38.854s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example/share/unitree_ros2_example/cmake/unitree_ros2_exampleConfig-version.cmake
+[38.861s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_ros2_example/share/unitree_ros2_example/package.xml
+[38.871s] Invoked command in '/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_ros2_example' returned '0': AMENT_PREFIX_PATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api:/opt/ros/humble LD_LIBRARY_PATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg/lib:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go/lib:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/home/elijah/convex-mpc-unitree-go2/third_party/acados/lib PYTHONPATH=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_hg/local/lib/python3.10/dist-packages:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_go/local/lib/python3.10/dist-packages:/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/elijah/go2-convex-mpc/ros2_ws/build/unitree_ros2_example

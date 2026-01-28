@@ -1,0 +1,22 @@
+running develop
+running egg_info
+creating mujoco_go2_robot.egg-info
+writing mujoco_go2_robot.egg-info/PKG-INFO
+writing dependency_links to mujoco_go2_robot.egg-info/dependency_links.txt
+writing entry points to mujoco_go2_robot.egg-info/entry_points.txt
+writing requirements to mujoco_go2_robot.egg-info/requires.txt
+writing top-level names to mujoco_go2_robot.egg-info/top_level.txt
+writing manifest file 'mujoco_go2_robot.egg-info/SOURCES.txt'
+reading manifest file 'mujoco_go2_robot.egg-info/SOURCES.txt'
+writing manifest file 'mujoco_go2_robot.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/elijah/go2-convex-mpc/ros2_ws/install/mujoco_go2_robot/lib/python3.10/site-packages/mujoco-go2-robot.egg-link (link to .)
+Installing mujoco_robot script to /home/elijah/go2-convex-mpc/ros2_ws/install/mujoco_go2_robot/lib/mujoco_go2_robot
+
+Installed /home/elijah/go2-convex-mpc/ros2_ws/build/mujoco_go2_robot
+running symlink_data
+creating /home/elijah/go2-convex-mpc/ros2_ws/install/mujoco_go2_robot/share/ament_index
+creating /home/elijah/go2-convex-mpc/ros2_ws/install/mujoco_go2_robot/share/ament_index/resource_index
+creating /home/elijah/go2-convex-mpc/ros2_ws/install/mujoco_go2_robot/share/ament_index/resource_index/packages
+symbolically linking /home/elijah/go2-convex-mpc/ros2_ws/build/mujoco_go2_robot/resource/mujoco_go2_robot -> /home/elijah/go2-convex-mpc/ros2_ws/install/mujoco_go2_robot/share/ament_index/resource_index/packages
+symbolically linking /home/elijah/go2-convex-mpc/ros2_ws/build/mujoco_go2_robot/package.xml -> /home/elijah/go2-convex-mpc/ros2_ws/install/mujoco_go2_robot/share/mujoco_go2_robot

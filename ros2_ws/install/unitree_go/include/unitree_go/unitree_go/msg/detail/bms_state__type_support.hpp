@@ -1,0 +1,1 @@
+/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_go/rosidl_generator_cpp/unitree_go/msg/detail/bms_state__type_support.hpp

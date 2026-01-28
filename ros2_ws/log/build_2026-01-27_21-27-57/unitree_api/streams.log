@@ -1,0 +1,386 @@
+[0.015s] Invoking command in '/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_api': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/cyclonedds_ws/src/unitree/unitree_api -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api
+[0.029s] -- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.146s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.196s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[0.224s] -- Found geometry_msgs: 4.9.0 (/opt/ros/humble/share/geometry_msgs/cmake)
+[0.258s] -- Found rosidl_generator_c: 3.1.7 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.263s] -- Found rosidl_adapter: 3.1.7 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.271s] -- Found rosidl_generator_cpp: 3.1.7 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.283s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.297s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.333s] -- Found rosidl_default_generators: 1.2.0 (/opt/ros/humble/share/rosidl_default_generators/cmake)
+[0.340s] -- Found rosidl_generator_dds_idl: 0.8.1 (/opt/ros/humble/share/rosidl_generator_dds_idl/cmake)
+[0.586s] -- Found ament_cmake_ros: 0.10.0 (/opt/ros/humble/share/ament_cmake_ros/cmake)
+[0.929s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[1.077s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[1.094s] -- Found PythonInterp: /usr/bin/python3 (found suitable version "3.10.12", minimum required is "3.6") 
+[1.096s] -- Found python_cmake_module: 0.10.0 (/opt/ros/humble/share/python_cmake_module/cmake)
+[1.119s] -- Found PythonLibs: /usr/lib/x86_64-linux-gnu/libpython3.10.so (found suitable version "3.10.12", minimum required is "3.5") 
+[1.120s] -- Using PYTHON_EXECUTABLE: /usr/bin/python3
+[1.120s] -- Using PYTHON_INCLUDE_DIRS: /usr/include/python3.10
+[1.120s] -- Using PYTHON_LIBRARIES: /usr/lib/x86_64-linux-gnu/libpython3.10.so
+[1.137s] -- Found PythonExtra: .so  
+[1.200s] -- Found ament_lint_auto: 0.12.14 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[1.224s] -- Added test 'copyright' to check source files copyright and LICENSE
+[1.226s] -- Added test 'lint_cmake' to check CMake code style
+[1.227s] -- Added test 'xmllint' to check XML markup files
+[1.231s] -- Configuring done
+[1.269s] -- Generating done
+[1.280s] -- Build files have been written to: /home/elijah/go2-convex-mpc/ros2_ws/build/unitree_api
+[1.292s] Invoked command in '/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_api' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/elijah/go2-convex-mpc/ros2_ws/src/unitree_ros2/cyclonedds_ws/src/unitree/unitree_api -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api
+[1.294s] Invoking command in '/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_api': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/elijah/go2-convex-mpc/ros2_ws/build/unitree_api -- -j16 -l16
+[1.346s] [  1%] [34m[1mGenerating C code for ROS interfaces[0m
+[1.359s] [  2%] [34m[1mGenerating C++ code for ROS interfaces[0m
+[1.359s] [  3%] [34m[1mGenerating DDS interfaces[0m
+[1.373s] [  3%] Built target ament_cmake_python_symlink_unitree_api
+[1.715s] running egg_info
+[1.715s] creating unitree_api.egg-info
+[1.716s] writing unitree_api.egg-info/PKG-INFO
+[1.716s] writing dependency_links to unitree_api.egg-info/dependency_links.txt
+[1.716s] writing top-level names to unitree_api.egg-info/top_level.txt
+[1.716s] writing manifest file 'unitree_api.egg-info/SOURCES.txt'
+[1.720s] reading manifest file 'unitree_api.egg-info/SOURCES.txt'
+[1.720s] writing manifest file 'unitree_api.egg-info/SOURCES.txt'
+[1.829s] [  3%] Built target ament_cmake_python_build_unitree_api_egg
+[1.914s] [  3%] Built target unitree_api__dds_connext_idl
+[2.169s] [  3%] Built target unitree_api__cpp
+[2.189s] [  6%] [34m[1mGenerating C++ type support dispatch for ROS interfaces[0m
+[2.189s] [  6%] [34m[1mGenerating C++ introspection for ROS interfaces[0m
+[2.189s] [  6%] [34m[1mGenerating C++ type support for eProsima Fast-RTPS[0m
+[2.376s] [  9%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_generator_c.dir/rosidl_generator_c/unitree_api/msg/detail/request_identity__functions.c.o[0m
+[2.377s] [  9%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_generator_c.dir/rosidl_generator_c/unitree_api/msg/detail/request_lease__functions.c.o[0m
+[2.377s] [ 10%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_generator_c.dir/rosidl_generator_c/unitree_api/msg/detail/request__functions.c.o[0m
+[2.377s] [ 11%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_generator_c.dir/rosidl_generator_c/unitree_api/msg/detail/response_header__functions.c.o[0m
+[2.378s] [ 12%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_generator_c.dir/rosidl_generator_c/unitree_api/msg/detail/request_header__functions.c.o[0m
+[2.378s] [ 13%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_generator_c.dir/rosidl_generator_c/unitree_api/msg/detail/response__functions.c.o[0m
+[2.385s] [ 14%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_generator_c.dir/rosidl_generator_c/unitree_api/msg/detail/request_policy__functions.c.o[0m
+[2.387s] [ 15%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_generator_c.dir/rosidl_generator_c/unitree_api/msg/detail/response_status__functions.c.o[0m
+[2.480s] [ 17%] [32m[1mLinking C shared library libunitree_api__rosidl_generator_c.so[0m
+[2.568s] [ 17%] Built target unitree_api__rosidl_generator_c
+[2.598s] [ 18%] [34m[1mGenerating C type support dispatch for ROS interfaces[0m
+[2.615s] [ 19%] [34m[1mGenerating C introspection for ROS interfaces[0m
+[2.617s] [ 20%] [34m[1mGenerating C type support for eProsima Fast-RTPS[0m
+[2.974s] [ 21%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/unitree_api/msg/request__type_support.cpp.o[0m
+[2.979s] [ 22%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/unitree_api/msg/request_identity__type_support.cpp.o[0m
+[2.997s] [ 23%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/unitree_api/msg/request_header__type_support.cpp.o[0m
+[2.997s] [ 25%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/unitree_api/msg/response__type_support.cpp.o[0m
+[3.005s] [ 26%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/unitree_api/msg/response_status__type_support.cpp.o[0m
+[3.010s] [ 27%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/unitree_api/msg/request_policy__type_support.cpp.o[0m
+[3.011s] [ 28%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/unitree_api/msg/response_header__type_support.cpp.o[0m
+[3.033s] [ 29%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/unitree_api/msg/request_lease__type_support.cpp.o[0m
+[3.106s] [ 30%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/unitree_api/msg/detail/request__type_support.cpp.o[0m
+[3.113s] [ 31%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/unitree_api/msg/detail/request_identity__type_support.cpp.o[0m
+[3.121s] [ 32%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/unitree_api/msg/detail/request_header__type_support.cpp.o[0m
+[3.131s] [ 34%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/unitree_api/msg/detail/request_lease__type_support.cpp.o[0m
+[3.856s] [ 35%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/unitree_api/msg/detail/request_policy__type_support.cpp.o[0m
+[3.881s] [ 36%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/unitree_api/msg/detail/response__type_support.cpp.o[0m
+[3.899s] [ 37%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/unitree_api/msg/detail/response_header__type_support.cpp.o[0m
+[3.968s] [ 38%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/unitree_api/msg/detail/response_status__type_support.cpp.o[0m
+[3.968s] [ 39%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/unitree_api/msg/detail/dds_fastrtps/request_header__type_support.cpp.o[0m
+[3.978s] [ 40%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/unitree_api/msg/detail/dds_fastrtps/request_identity__type_support.cpp.o[0m
+[3.982s] [ 42%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/unitree_api/msg/detail/dds_fastrtps/request__type_support.cpp.o[0m
+[4.065s] [ 43%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/unitree_api/msg/detail/dds_fastrtps/request_lease__type_support.cpp.o[0m
+[4.100s] [ 44%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_c.dir/rosidl_typesupport_c/unitree_api/msg/request__type_support.cpp.o[0m
+[4.211s] [ 45%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_c.dir/rosidl_typesupport_c/unitree_api/msg/request_header__type_support.cpp.o[0m
+[4.268s] [ 46%] [32m[1mLinking CXX shared library libunitree_api__rosidl_typesupport_cpp.so[0m
+[4.340s] [ 47%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_c.dir/rosidl_typesupport_c/unitree_api/msg/request_identity__type_support.cpp.o[0m
+[4.414s] [ 48%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_c.dir/rosidl_typesupport_c/unitree_api/msg/request_lease__type_support.cpp.o[0m
+[4.459s] [ 48%] Built target unitree_api__rosidl_typesupport_cpp
+[4.481s] [ 51%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/unitree_api/msg/detail/dds_fastrtps/response__type_support.cpp.o[0m
+[4.485s] [ 51%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/unitree_api/msg/detail/dds_fastrtps/request_policy__type_support.cpp.o[0m
+[4.499s] [ 52%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_c.dir/rosidl_typesupport_c/unitree_api/msg/request_policy__type_support.cpp.o[0m
+[4.503s] [ 53%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_c.dir/rosidl_typesupport_c/unitree_api/msg/response__type_support.cpp.o[0m
+[4.528s] [ 54%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/unitree_api/msg/detail/request__type_support.c.o[0m
+[4.611s] [ 55%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/unitree_api/msg/detail/request__type_support_c.cpp.o[0m
+[4.613s] [ 56%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/unitree_api/msg/detail/request_header__type_support.c.o[0m
+[4.650s] [ 57%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_c.dir/rosidl_typesupport_c/unitree_api/msg/response_header__type_support.cpp.o[0m
+[4.680s] [ 59%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/unitree_api/msg/detail/dds_fastrtps/response_header__type_support.cpp.o[0m
+[4.727s] [ 60%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/unitree_api/msg/detail/request_identity__type_support.c.o[0m
+[4.738s] [ 61%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/unitree_api/msg/detail/request_header__type_support_c.cpp.o[0m
+[4.746s] [ 62%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_c.dir/rosidl_typesupport_c/unitree_api/msg/response_status__type_support.cpp.o[0m
+[4.810s] [ 63%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/unitree_api/msg/detail/request_lease__type_support.c.o[0m
+[4.826s] [ 64%] [32m[1mLinking CXX shared library libunitree_api__rosidl_typesupport_c.so[0m
+[4.838s] [ 65%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/unitree_api/msg/detail/request_identity__type_support_c.cpp.o[0m
+[4.851s] [ 67%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/unitree_api/msg/detail/request_policy__type_support.c.o[0m
+[4.989s] [ 69%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/unitree_api/msg/detail/dds_fastrtps/response_status__type_support.cpp.o[0m
+[4.990s] [ 69%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/unitree_api/msg/detail/response__type_support.c.o[0m
+[5.017s] [ 70%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/unitree_api/msg/detail/request_lease__type_support_c.cpp.o[0m
+[5.034s] [ 70%] Built target unitree_api__rosidl_typesupport_c
+[5.073s] [ 71%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/unitree_api/msg/detail/request_policy__type_support_c.cpp.o[0m
+[5.090s] [ 72%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/unitree_api/msg/detail/response_header__type_support.c.o[0m
+[5.210s] [ 73%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/unitree_api/msg/detail/response_status__type_support.c.o[0m
+[5.313s] [ 75%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/unitree_api/msg/detail/response__type_support_c.cpp.o[0m
+[5.315s] [ 76%] [32m[1mLinking CXX shared library libunitree_api__rosidl_typesupport_introspection_cpp.so[0m
+[5.423s] [ 77%] [32m[1mLinking C shared library libunitree_api__rosidl_typesupport_introspection_c.so[0m
+[5.450s] [ 78%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/unitree_api/msg/detail/response_header__type_support_c.cpp.o[0m
+[5.571s] [ 79%] [32mBuilding CXX object CMakeFiles/unitree_api__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/unitree_api/msg/detail/response_status__type_support_c.cpp.o[0m
+[5.676s] [ 79%] Built target unitree_api__rosidl_typesupport_introspection_c
+[5.938s] [ 79%] Built target unitree_api__rosidl_typesupport_introspection_cpp
+[7.081s] [ 80%] [32m[1mLinking CXX shared library libunitree_api__rosidl_typesupport_fastrtps_cpp.so[0m
+[7.487s] [ 81%] [32m[1mLinking CXX shared library libunitree_api__rosidl_typesupport_fastrtps_c.so[0m
+[7.557s] [ 81%] Built target unitree_api__rosidl_typesupport_fastrtps_cpp
+[7.890s] [ 81%] Built target unitree_api__rosidl_typesupport_fastrtps_c
+[7.971s] [ 81%] Built target unitree_api
+[8.044s] [ 82%] [34m[1mGenerating Python code for ROS interfaces[0m
+[9.906s] [ 82%] Built target unitree_api__py
+[9.991s] [ 84%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_generator_py.dir/rosidl_generator_py/unitree_api/msg/_request_s.c.o[0m
+[9.993s] [ 85%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_generator_py.dir/rosidl_generator_py/unitree_api/msg/_request_header_s.c.o[0m
+[10.000s] [ 86%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_generator_py.dir/rosidl_generator_py/unitree_api/msg/_request_identity_s.c.o[0m
+[10.001s] [ 87%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_generator_py.dir/rosidl_generator_py/unitree_api/msg/_request_lease_s.c.o[0m
+[10.003s] [ 88%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_generator_py.dir/rosidl_generator_py/unitree_api/msg/_request_policy_s.c.o[0m
+[10.012s] [ 89%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_generator_py.dir/rosidl_generator_py/unitree_api/msg/_response_s.c.o[0m
+[10.022s] [ 90%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_generator_py.dir/rosidl_generator_py/unitree_api/msg/_response_header_s.c.o[0m
+[10.029s] [ 92%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_generator_py.dir/rosidl_generator_py/unitree_api/msg/_response_status_s.c.o[0m
+[10.525s] [ 93%] [32m[1mLinking C shared library rosidl_generator_py/unitree_api/libunitree_api__rosidl_generator_py.so[0m
+[10.728s] [ 93%] Built target unitree_api__rosidl_generator_py
+[10.790s] [ 94%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_typesupport_introspection_c__pyext.dir/rosidl_generator_py/unitree_api/_unitree_api_s.ep.rosidl_typesupport_introspection_c.c.o[0m
+[10.799s] [ 95%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_typesupport_c__pyext.dir/rosidl_generator_py/unitree_api/_unitree_api_s.ep.rosidl_typesupport_c.c.o[0m
+[10.823s] [ 96%] [32mBuilding C object CMakeFiles/unitree_api__rosidl_typesupport_fastrtps_c__pyext.dir/rosidl_generator_py/unitree_api/_unitree_api_s.ep.rosidl_typesupport_fastrtps_c.c.o[0m
+[11.024s] [ 97%] [32m[1mLinking C shared library rosidl_generator_py/unitree_api/unitree_api_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so[0m
+[11.025s] [ 98%] [32m[1mLinking C shared library rosidl_generator_py/unitree_api/unitree_api_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so[0m
+[11.243s] [ 98%] Built target unitree_api__rosidl_typesupport_c__pyext
+[11.248s] [ 98%] Built target unitree_api__rosidl_typesupport_introspection_c__pyext
+[11.351s] [100%] [32m[1mLinking C shared library rosidl_generator_py/unitree_api/unitree_api_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so[0m
+[11.454s] [100%] Built target unitree_api__rosidl_typesupport_fastrtps_c__pyext
+[11.504s] Invoked command in '/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_api' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/elijah/go2-convex-mpc/ros2_ws/build/unitree_api -- -j16 -l16
+[11.534s] Invoking command in '/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_api': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/elijah/go2-convex-mpc/ros2_ws/build/unitree_api
+[11.551s] -- Install configuration: ""
+[11.554s] -- Execute custom install script
+[11.558s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/ament_index/resource_index/rosidl_interfaces/unitree_api
+[11.587s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request__functions.h
+[11.626s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request__struct.h
+[11.668s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request__type_support.h
+[11.691s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_header__functions.h
+[11.711s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_header__struct.h
+[11.754s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_header__type_support.h
+[11.794s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_identity__functions.h
+[11.825s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_identity__struct.h
+[11.866s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_identity__type_support.h
+[11.901s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_lease__functions.h
+[11.943s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_lease__struct.h
+[11.984s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_lease__type_support.h
+[12.026s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_policy__functions.h
+[12.059s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_policy__struct.h
+[12.093s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_policy__type_support.h
+[12.129s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response__functions.h
+[12.152s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response__struct.h
+[12.187s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response__type_support.h
+[12.223s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_header__functions.h
+[12.261s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_header__struct.h
+[12.303s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_header__type_support.h
+[12.349s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_status__functions.h
+[12.371s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_status__struct.h
+[12.398s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_status__type_support.h
+[12.434s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/request.h
+[12.464s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/request_header.h
+[12.479s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/request_identity.h
+[12.509s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/request_lease.h
+[12.545s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/request_policy.h
+[12.581s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/response.h
+[12.616s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/response_header.h
+[12.654s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/response_status.h
+[12.699s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/rosidl_generator_c__visibility_control.h
+[12.728s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/environment/library_path.sh
+[12.763s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/environment/library_path.dsv
+[12.803s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request__rosidl_typesupport_fastrtps_c.h
+[12.843s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_header__rosidl_typesupport_fastrtps_c.h
+[12.885s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_identity__rosidl_typesupport_fastrtps_c.h
+[12.925s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_lease__rosidl_typesupport_fastrtps_c.h
+[12.962s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_policy__rosidl_typesupport_fastrtps_c.h
+[12.998s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response__rosidl_typesupport_fastrtps_c.h
+[13.022s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_header__rosidl_typesupport_fastrtps_c.h
+[13.055s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_status__rosidl_typesupport_fastrtps_c.h
+[13.088s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+[13.122s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request__builder.hpp
+[13.160s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request__struct.hpp
+[13.198s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request__traits.hpp
+[13.228s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request__type_support.hpp
+[13.259s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_header__builder.hpp
+[13.282s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_header__struct.hpp
+[13.318s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_header__traits.hpp
+[13.343s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_header__type_support.hpp
+[13.370s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_identity__builder.hpp
+[13.407s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_identity__struct.hpp
+[13.452s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_identity__traits.hpp
+[13.489s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_identity__type_support.hpp
+[13.520s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_lease__builder.hpp
+[13.548s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_lease__struct.hpp
+[13.570s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_lease__traits.hpp
+[13.591s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_lease__type_support.hpp
+[13.611s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_policy__builder.hpp
+[13.643s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_policy__struct.hpp
+[13.675s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_policy__traits.hpp
+[13.704s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_policy__type_support.hpp
+[13.753s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response__builder.hpp
+[13.785s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response__struct.hpp
+[13.820s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response__traits.hpp
+[13.837s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response__type_support.hpp
+[13.884s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_header__builder.hpp
+[13.942s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_header__struct.hpp
+[13.977s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_header__traits.hpp
+[14.019s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_header__type_support.hpp
+[14.053s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_status__builder.hpp
+[14.070s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_status__struct.hpp
+[14.092s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_status__traits.hpp
+[14.113s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_status__type_support.hpp
+[14.134s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/request.hpp
+[14.150s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/request_header.hpp
+[14.166s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/request_identity.hpp
+[14.185s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/request_lease.hpp
+[14.200s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/request_policy.hpp
+[14.224s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/response.hpp
+[14.240s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/response_header.hpp
+[14.255s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/response_status.hpp
+[14.269s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/rosidl_generator_cpp__visibility_control.hpp
+[14.288s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request__rosidl_typesupport_fastrtps_cpp.hpp
+[14.300s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_header__rosidl_typesupport_fastrtps_cpp.hpp
+[14.313s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_identity__rosidl_typesupport_fastrtps_cpp.hpp
+[14.325s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_lease__rosidl_typesupport_fastrtps_cpp.hpp
+[14.339s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_policy__rosidl_typesupport_fastrtps_cpp.hpp
+[14.355s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response__rosidl_typesupport_fastrtps_cpp.hpp
+[14.370s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_header__rosidl_typesupport_fastrtps_cpp.hpp
+[14.388s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_status__rosidl_typesupport_fastrtps_cpp.hpp
+[14.403s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+[14.417s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request__rosidl_typesupport_introspection_c.h
+[14.433s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_header__rosidl_typesupport_introspection_c.h
+[14.444s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_identity__rosidl_typesupport_introspection_c.h
+[14.454s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_lease__rosidl_typesupport_introspection_c.h
+[14.466s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_policy__rosidl_typesupport_introspection_c.h
+[14.478s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response__rosidl_typesupport_introspection_c.h
+[14.489s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_header__rosidl_typesupport_introspection_c.h
+[14.500s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_status__rosidl_typesupport_introspection_c.h
+[14.511s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/rosidl_typesupport_introspection_c__visibility_control.h
+[14.524s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request__rosidl_typesupport_introspection_cpp.hpp
+[14.534s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_header__rosidl_typesupport_introspection_cpp.hpp
+[14.545s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_identity__rosidl_typesupport_introspection_cpp.hpp
+[14.554s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_lease__rosidl_typesupport_introspection_cpp.hpp
+[14.563s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/request_policy__rosidl_typesupport_introspection_cpp.hpp
+[14.575s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response__rosidl_typesupport_introspection_cpp.hpp
+[14.591s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_header__rosidl_typesupport_introspection_cpp.hpp
+[14.604s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/include/unitree_api/unitree_api/msg/detail/response_status__rosidl_typesupport_introspection_cpp.hpp
+[14.616s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/environment/pythonpath.sh
+[14.628s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/environment/pythonpath.dsv
+[14.636s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api-0.0.0-py3.10.egg-info/PKG-INFO
+[14.661s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api-0.0.0-py3.10.egg-info/SOURCES.txt
+[14.696s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api-0.0.0-py3.10.egg-info/dependency_links.txt
+[14.719s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api-0.0.0-py3.10.egg-info/top_level.txt
+[14.752s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/__init__.py
+[14.810s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/_unitree_api_s.ep.rosidl_typesupport_c.c
+[14.832s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/_unitree_api_s.ep.rosidl_typesupport_fastrtps_c.c
+[14.851s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/_unitree_api_s.ep.rosidl_typesupport_introspection_c.c
+[14.868s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/libunitree_api__rosidl_generator_py.so
+[14.896s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/__init__.py
+[14.920s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_request.py
+[14.955s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_request_header.py
+[14.984s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_request_header_s.c
+[15.008s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_request_identity.py
+[15.027s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_request_identity_s.c
+[15.064s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_request_lease.py
+[15.096s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_request_lease_s.c
+[15.136s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_request_policy.py
+[15.155s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_request_policy_s.c
+[15.172s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_request_s.c
+[15.213s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_response.py
+[15.240s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_response_header.py
+[15.250s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_response_header_s.c
+[15.267s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_response_s.c
+[15.286s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_response_status.py
+[15.303s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_response_status_s.c
+[15.332s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/unitree_api_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[15.344s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/unitree_api_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[15.359s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/unitree_api_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[15.383s] -- Up-to-date symlink: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/unitree_api_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[15.384s] -- Up-to-date symlink: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/unitree_api_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[15.385s] -- Up-to-date symlink: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/unitree_api_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[15.386s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/Request.idl
+[15.417s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/RequestHeader.idl
+[15.432s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/RequestIdentity.idl
+[15.448s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/RequestLease.idl
+[15.464s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/RequestPolicy.idl
+[15.482s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/Response.idl
+[15.499s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/ResponseHeader.idl
+[15.520s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/ResponseStatus.idl
+[15.535s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/Request.msg
+[15.549s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/RequestHeader.msg
+[15.565s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/RequestIdentity.msg
+[15.578s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/RequestLease.msg
+[15.595s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/RequestPolicy.msg
+[15.611s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/Response.msg
+[15.626s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/ResponseHeader.msg
+[15.641s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/ResponseStatus.msg
+[15.655s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/dds_connext/RequestHeader_.idl
+[15.668s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/dds_connext/RequestIdentity_.idl
+[15.682s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/dds_connext/RequestLease_.idl
+[15.697s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/dds_connext/RequestPolicy_.idl
+[15.713s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/dds_connext/Request_.idl
+[15.728s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/dds_connext/ResponseHeader_.idl
+[15.741s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/dds_connext/ResponseStatus_.idl
+[15.752s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/msg/dds_connext/Response_.idl
+[15.763s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/ament_index/resource_index/package_run_dependencies/unitree_api
+[15.773s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/ament_index/resource_index/parent_prefix_path/unitree_api
+[15.783s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/environment/ament_prefix_path.sh
+[15.795s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/environment/ament_prefix_path.dsv
+[15.809s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/environment/path.sh
+[15.820s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/environment/path.dsv
+[15.829s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/local_setup.bash
+[15.838s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/local_setup.sh
+[15.846s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/local_setup.zsh
+[15.854s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/local_setup.dsv
+[15.862s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/package.dsv
+[15.870s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/ament_index/resource_index/packages/unitree_api
+[15.878s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/rosidl_cmake-extras.cmake
+[15.887s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/ament_cmake_export_dependencies-extras.cmake
+[15.896s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/ament_cmake_export_include_directories-extras.cmake
+[15.906s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/ament_cmake_export_libraries-extras.cmake
+[15.915s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/ament_cmake_export_targets-extras.cmake
+[15.924s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+[15.932s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+[15.940s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/unitree_apiConfig.cmake
+[15.947s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/unitree_apiConfig-version.cmake
+[15.955s] -- Symlinking: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/package.xml
+[15.962s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib/libunitree_api__rosidl_generator_c.so
+[15.962s] -- Set runtime path of "/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib/libunitree_api__rosidl_generator_c.so" to ""
+[15.962s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib/libunitree_api__rosidl_typesupport_fastrtps_c.so
+[15.963s] -- Set runtime path of "/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib/libunitree_api__rosidl_typesupport_fastrtps_c.so" to ""
+[15.963s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib/libunitree_api__rosidl_typesupport_fastrtps_cpp.so
+[15.963s] -- Set runtime path of "/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib/libunitree_api__rosidl_typesupport_fastrtps_cpp.so" to ""
+[15.963s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib/libunitree_api__rosidl_typesupport_introspection_c.so
+[15.964s] -- Set runtime path of "/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib/libunitree_api__rosidl_typesupport_introspection_c.so" to ""
+[15.964s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib/libunitree_api__rosidl_typesupport_c.so
+[15.964s] -- Set runtime path of "/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib/libunitree_api__rosidl_typesupport_c.so" to ""
+[15.964s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib/libunitree_api__rosidl_typesupport_introspection_cpp.so
+[15.965s] -- Set runtime path of "/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib/libunitree_api__rosidl_typesupport_introspection_cpp.so" to ""
+[15.965s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib/libunitree_api__rosidl_typesupport_cpp.so
+[15.965s] -- Set runtime path of "/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib/libunitree_api__rosidl_typesupport_cpp.so" to ""
+[15.998s] Listing '/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api'...
+[15.998s] Compiling '/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/__init__.py'...
+[15.998s] Listing '/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg'...
+[15.998s] Compiling '/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/__init__.py'...
+[15.998s] Compiling '/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_request.py'...
+[15.998s] Compiling '/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_request_header.py'...
+[15.998s] Compiling '/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_request_identity.py'...
+[15.998s] Compiling '/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_request_lease.py'...
+[15.998s] Compiling '/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_request_policy.py'...
+[15.999s] Compiling '/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_response.py'...
+[15.999s] Compiling '/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_response_header.py'...
+[15.999s] Compiling '/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/local/lib/python3.10/dist-packages/unitree_api/msg/_response_status.py'...
+[16.003s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib/libunitree_api__rosidl_generator_py.so
+[16.004s] -- Set runtime path of "/home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/lib/libunitree_api__rosidl_generator_py.so" to ""
+[16.004s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/export_unitree_api__rosidl_generator_cExport.cmake
+[16.004s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/export_unitree_api__rosidl_generator_cExport-noconfig.cmake
+[16.004s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/export_unitree_api__rosidl_typesupport_fastrtps_cExport.cmake
+[16.004s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/export_unitree_api__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+[16.004s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/export_unitree_api__rosidl_generator_cppExport.cmake
+[16.004s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/export_unitree_api__rosidl_typesupport_fastrtps_cppExport.cmake
+[16.005s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/export_unitree_api__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+[16.005s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/unitree_api__rosidl_typesupport_introspection_cExport.cmake
+[16.005s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/unitree_api__rosidl_typesupport_introspection_cExport-noconfig.cmake
+[16.005s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/unitree_api__rosidl_typesupport_cExport.cmake
+[16.005s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/unitree_api__rosidl_typesupport_cExport-noconfig.cmake
+[16.005s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/unitree_api__rosidl_typesupport_introspection_cppExport.cmake
+[16.005s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/unitree_api__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+[16.005s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/unitree_api__rosidl_typesupport_cppExport.cmake
+[16.006s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/unitree_api__rosidl_typesupport_cppExport-noconfig.cmake
+[16.006s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/export_unitree_api__rosidl_generator_pyExport.cmake
+[16.006s] -- Installing: /home/elijah/go2-convex-mpc/ros2_ws/install/unitree_api/share/unitree_api/cmake/export_unitree_api__rosidl_generator_pyExport-noconfig.cmake
+[16.009s] Invoked command in '/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_api' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/elijah/go2-convex-mpc/ros2_ws/build/unitree_api

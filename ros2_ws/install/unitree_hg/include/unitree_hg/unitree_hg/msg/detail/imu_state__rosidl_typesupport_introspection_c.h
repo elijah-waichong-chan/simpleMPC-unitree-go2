@@ -1,0 +1,1 @@
+/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_hg/rosidl_typesupport_introspection_c/unitree_hg/msg/detail/imu_state__rosidl_typesupport_introspection_c.h
