@@ -1,11 +1,46 @@
-/third_party/
-
 *.egg-info/
 dist/
 build/
-
+log/
+install/
 
 __pycache__/
 *.pyc
 
 /src/convex_mpc/centroidal_mpc_condensed.py
+
+# ROS 2 / colcon
+/ros2_ws/build/
+/ros2_ws/install/
+/ros2_ws/log/
+
+# External deps / local builds
+/ros2_ws/casadi/
+
+# CMake / compiler artifacts
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+*.o
+*.obj
+*.so
+*.a
+*.dylib
+*.dll
+*.exe
+
+# Python tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
