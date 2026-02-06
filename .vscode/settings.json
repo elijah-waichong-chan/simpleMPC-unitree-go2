@@ -1,5 +1,8 @@
 {
     "python.analysis.extraPaths": [
-        "./src/python"
-    ]
+        "./src/python",
+        "./ros2_ws/build/unitree_go/ament_cmake_python/unitree_go"
+    ],
+    "C_Cpp.errorSquiggles": "disabled",
+    "C_Cpp.default.compilerPath": ""
 }

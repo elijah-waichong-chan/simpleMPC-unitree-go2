@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>locomotion_controller</name>
+  <version>0.0.0</version>
+  <description>TODO: Package description</description>
+  <maintainer email="chanwaichong0352@gmail.com">elijah</maintainer>
+  <license>TODO: License declaration</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <build_depend>rclcpp</build_depend>
+  <build_depend>Eigen3</build_depend>
+  <build_depend>pinocchio</build_depend>
+  <build_depend>go2_msgs</build_depend>
+  <build_depend>unitree_go</build_depend>
+
+  <exec_depend>rclcpp</exec_depend>
+  <exec_depend>Eigen3</exec_depend>
+  <exec_depend>pinocchio</exec_depend>
+  <exec_depend>go2_msgs</exec_depend>
+  <exec_depend>unitree_go</exec_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
