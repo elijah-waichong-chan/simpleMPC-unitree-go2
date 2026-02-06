@@ -106,7 +106,7 @@
             <geom pos="0 0 -0.213" mesh="foot" class="visual" material="black" />
             <geom name="FL" class="foot" />
             <body name="FL_foot" pos="0 0 -0.213">
-              <site name="FL_foot_site" pos="0 0 0" size="0.01"/>
+              <site name="FL_foot_site" pos="-0.002 0 0" size="0.03"/>
             </body>
           </body>
         </body>
@@ -143,7 +143,7 @@
             <geom pos="0 0 -0.213" mesh="foot" class="visual" material="black" />
             <geom name="FR" class="foot" />
             <body name="FR_foot" pos="0 0 -0.213">
-              <site name="FR_foot_site" pos="0 0 0" size="0.01"/>
+              <site name="FR_foot_site" pos="-0.002 0 0" size="0.03"/>
             </body>
           </body>
         </body>
@@ -180,7 +180,7 @@
             <geom pos="0 0 -0.213" mesh="foot" class="visual" material="black" />
             <geom name="RL" class="foot" />
             <body name="RL_foot" pos="0 0 -0.213">
-              <site name="RL_foot_site" pos="0 0 0" size="0.01"/>
+              <site name="RL_foot_site" pos="-0.002 0 0" size="0.03"/>
             </body>
           </body>
         </body>
@@ -219,7 +219,7 @@
             <geom pos="0 0 -0.213" mesh="foot" class="visual" material="black" />
             <geom name="RR" class="foot" />
             <body name="RR_foot" pos="0 0 -0.213">
-              <site name="RR_foot_site" pos="0 0 0" size="0.01"/>
+              <site name="RR_foot_site" pos="-0.002 0 0" size="0.03"/>
             </body>
           </body>
         </body>
