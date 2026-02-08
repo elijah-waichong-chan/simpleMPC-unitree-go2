@@ -4,3 +4,6 @@
 [submodule "invariant-ekf"]
 	path = invariant-ekf
 	url = https://github.com/inria-paris-robotics-lab/invariant-ekf
+[submodule "ros2_ws/src/unitree_ros2"]
+	path = ros2_ws/src/unitree_ros2
+	url = https://github.com/unitreerobotics/unitree_ros2
