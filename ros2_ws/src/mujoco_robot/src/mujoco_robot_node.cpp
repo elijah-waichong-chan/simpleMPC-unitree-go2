@@ -44,21 +44,27 @@ public:
     sim_hz_ = 500.0;
     pub_hz_ = 250.0;
 
-    if (std::fmod(sim_hz_, pub_hz_) != 0.0) {
-      throw std::runtime_error("SIM_HZ must be divisible by PUB_HZ.");
-    }
-    pub_decim_ = static_cast<int>(sim_hz_ / pub_hz_);
-    sim_dt_ = 1.0 / sim_hz_;
-
     // Parameters
     declare_parameter<std::string>("xml_path", "/home/elijah/go2-convex-mpc/models/MJCF/go2/scene.xml");
     declare_parameter<bool>("enable_viewer", true);
     declare_parameter<bool>("freeze_base", false);
     declare_parameter<double>("render_hz", 30.0);
+    declare_parameter<double>("sim_hz", sim_hz_);
+    declare_parameter<double>("pub_hz", pub_hz_);
     xml_path_ = get_parameter("xml_path").as_string();
     enable_viewer_ = get_parameter("enable_viewer").as_bool();
     freeze_base_ = get_parameter("freeze_base").as_bool();
     render_hz_ = get_parameter("render_hz").as_double();
+    sim_hz_ = get_parameter("sim_hz").as_double();
+    pub_hz_ = get_parameter("pub_hz").as_double();
+    if (sim_hz_ <= 0.0 || pub_hz_ <= 0.0) {
+      throw std::runtime_error("sim_hz and pub_hz must be > 0.");
+    }
+    if (std::fmod(sim_hz_, pub_hz_) != 0.0) {
+      throw std::runtime_error("sim_hz must be divisible by pub_hz.");
+    }
+    pub_decim_ = static_cast<int>(sim_hz_ / pub_hz_);
+    sim_dt_ = 1.0 / sim_hz_;
     if (render_hz_ < 0.0) {
       render_hz_ = 0.0;
     }
@@ -265,6 +271,7 @@ public:
       }
     }
 
+    last_tau_ = tau;
     set_joint_torque_(tau);
 
     mj_step2(model_, data_);
@@ -296,6 +303,7 @@ public:
       const int j = kMujocoToUnitree[i];
       msg.motor_state[i].q  = static_cast<double>(q[7 + j]);
       msg.motor_state[i].dq = static_cast<double>(v[6 + j]);
+      msg.motor_state[i].tau_est = static_cast<double>(last_tau_[i]);
     }
 
     const auto quat_wxyz = sensor_ptr_(imu_quat_);  // [w,x,y,z]
@@ -385,7 +393,6 @@ private:
     s.adr = static_cast<int>(model_->sensor_adr[sid]);
     s.dim = static_cast<int>(model_->sensor_dim[sid]);
 
-    RCLCPP_INFO(get_logger(), "Sensor %s: adr=%d dim=%d", name.c_str(), s.adr, s.dim);
     return s;
   }
 
@@ -554,6 +561,9 @@ private:
 
   // ROS
   rclcpp::Publisher<unitree_go::msg::LowState>::SharedPtr pub_lowstate_;
+
+  // Last applied joint torques in Unitree motor_state order.
+  std::array<double, 12> last_tau_{};
   rclcpp::Publisher<go2_msgs::msg::QDq>::SharedPtr pub_qdq_;
   rclcpp::Subscription<unitree_go::msg::LowCmd>::SharedPtr sub_cmd_;
 
