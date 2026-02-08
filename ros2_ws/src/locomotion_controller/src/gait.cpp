@@ -7,11 +7,15 @@ namespace locomotion_mpc {
 
 namespace {
 const Eigen::Vector4d kPhaseOffset(0.5, 0.0, 0.0, 0.5);
-constexpr double kHeightSwing = 0.1;
 }  // namespace
 
-Gait::Gait(double frequency_hz, double duty)
-  : gait_duty_(duty), gait_hz_(frequency_hz)
+Gait::Gait(double frequency_hz, double duty,
+           double ground_offset,
+           double swing_height)
+  : gait_duty_(duty),
+    gait_hz_(frequency_hz),
+    ground_offset_(ground_offset),
+    swing_height_(swing_height)
 {
   gait_period_ = 1.0 / gait_hz_;
   stance_time_ = gait_duty_ * gait_period_;
@@ -55,7 +59,7 @@ Eigen::Vector3d Gait::computeTouchdownWorldForTrajPurposeOnly(
   const double T = swing_time_ + 0.5 * stance_time_;
   const double pred_time = 0.5 * T;
 
-  const Eigen::Vector3d pos_nominal(hip_pos_world.x(), hip_pos_world.y(), 0.02);
+  const Eigen::Vector3d pos_nominal(hip_pos_world.x(), hip_pos_world.y(), ground_offset_);
   const Eigen::Vector3d pos_drift(base_vel.x() * pred_time, base_vel.y() * pred_time, 0.0);
 
   const double dtheta = yaw_rate * pred_time;
@@ -97,7 +101,7 @@ Gait::computeSwingTrajAndTouchdown(const PinocchioModel & go2,
   const double k_v_y = 0.2 * T;
   const double k_p_y = 0.05;
 
-  const Eigen::Vector3d pos_nominal(hip_pos_world.x(), hip_pos_world.y(), 0.02);
+  const Eigen::Vector3d pos_nominal(hip_pos_world.x(), hip_pos_world.y(), ground_offset_);
   const Eigen::Vector3d pos_drift(x_vel_des * pred_time, y_vel_des * pred_time, 0.0);
   const Eigen::Vector3d pos_correction(
     k_p_x * (pos_com_world.x() - x_pos_des),
@@ -117,7 +121,7 @@ Gait::computeSwingTrajAndTouchdown(const PinocchioModel & go2,
   const Eigen::Vector3d pos_touchdown =
     pos_nominal + pos_drift + pos_correction + vel_correction + rot_corr;
 
-  SwingTrajectory traj(foot_pos, pos_touchdown, swing_time_, kHeightSwing);
+  SwingTrajectory traj(foot_pos, pos_touchdown, swing_time_, swing_height_);
   return {traj, pos_touchdown};
 }
 
