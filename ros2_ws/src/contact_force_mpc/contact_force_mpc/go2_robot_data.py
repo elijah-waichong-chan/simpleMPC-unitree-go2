@@ -3,19 +3,16 @@ from pathlib import Path
 import pinocchio as pin 
 import numpy as np
 from numpy import cos, sin
-from importlib.resources import files
+from ament_index_python.packages import get_package_share_directory
 
 
 # --------------------------------------------------------------------------------
 # Model Setting
 # --------------------------------------------------------------------------------
 
-PACKAGE_DIRS = files("contact_force_mpc").joinpath("models/URDF")
-PACKAGE_DIRS = str(PACKAGE_DIRS)
-
-URDF_PATH = str(files("contact_force_mpc").joinpath(
-    "models/URDF/go2_description/urdf/go2_description.urdf"
-))
+GO2_SHARE_DIR = get_package_share_directory("go2_description")
+PACKAGE_DIRS = GO2_SHARE_DIR
+URDF_PATH = str(Path(GO2_SHARE_DIR) / "urdf" / "go2_description.urdf")
 
 
 class ConfigurationState:
@@ -379,7 +376,6 @@ class PinGo2Model:
             x_traj[:, i+1] = (self.Ad @ x_traj[:, [i]] + self.Bd[i] @ u_i + self.gd).flatten()
 
         return x_init, x_traj
-
 
 
 
