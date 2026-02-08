@@ -2,13 +2,17 @@
 #include <array>
 #include <chrono>
 #include <cstdlib>
+#include <filesystem>
 #include <mutex>
 #include <string>
 #include <vector>
 
 #include <Eigen/Dense>
+#include <ament_index_cpp/get_package_share_directory.hpp>
 #include <rclcpp/rclcpp.hpp>
+#include <rcl_interfaces/msg/set_parameters_result.hpp>
 
+#include "geometry_msgs/msg/twist.hpp"
 #include "go2_msgs/msg/mpc_forces.hpp"
 #include "go2_msgs/msg/q_dq.hpp"
 #include "unitree_go/msg/low_cmd.hpp"
@@ -24,11 +28,9 @@ public:
   LocomotionNode()
   : rclcpp::Node("locomotion_controller")
   {
-    std::string repo = std::string(std::getenv("HOME") ? std::getenv("HOME") : "") +
-      "/go2-convex-mpc";
-    std::string default_urdf =
-      repo + "/src/convex_mpc/models/URDF/go2_description/urdf/go2_description.urdf";
-    std::string default_pkg_dir = repo + "/src/convex_mpc/models/URDF";
+    const std::string go2_share = ament_index_cpp::get_package_share_directory("go2_description");
+    std::string default_urdf = go2_share + "/urdf/go2_description.urdf";
+    std::string default_pkg_dir = go2_share;
 
     std::string urdf_path = declare_parameter<std::string>("urdf_path", default_urdf);
     std::string pkg_dir = declare_parameter<std::string>("urdf_package_dir", default_pkg_dir);
@@ -41,9 +43,18 @@ public:
     y_vel_des_body_ = declare_parameter<double>("y_vel_des_body", 0.0);
     z_pos_des_body_ = declare_parameter<double>("z_pos_des_body", 0.27);
     yaw_rate_des_body_ = declare_parameter<double>("yaw_rate_des_body", 0.0);
+    ground_offset_ = declare_parameter<double>("ground_offset", ground_offset_);
+    swing_height_ = declare_parameter<double>("swing_height", swing_height_);
+    swing_kp_ = declare_parameter<double>("swing_kp", swing_kp_);
+    swing_kd_ = declare_parameter<double>("swing_kd", swing_kd_);
+    stance_force_min_ = declare_parameter<double>("stance_force_min", stance_force_min_);
+    stance_fallback_force_z_ = declare_parameter<double>(
+      "stance_fallback_force_z", stance_fallback_force_z_);
+    stance_fallback_force_ = Eigen::Vector3d(0.0, 0.0, stance_fallback_force_z_);
 
     go2_ = std::make_unique<PinocchioModel>(urdf_path, std::vector<std::string>{pkg_dir});
-    gait_ = std::make_unique<Gait>(gait_hz_, gait_duty_);
+    gait_ = std::make_unique<Gait>(gait_hz_, gait_duty_, ground_offset_, swing_height_);
+    leg_controller_.setSwingGains(swing_kp_, swing_kd_);
 
     tau_raw_ = Eigen::VectorXd::Zero(12);
     tau_hold_ = Eigen::VectorXd::Zero(12);
@@ -64,6 +75,8 @@ public:
       "/qdq", qos, std::bind(&LocomotionNode::onState, this, std::placeholders::_1));
     sub_mpc_ = this->create_subscription<go2_msgs::msg::MpcForces>(
       "/mpc_forces", qos, std::bind(&LocomotionNode::onMpc, this, std::placeholders::_1));
+    sub_cmd_vel_ = this->create_subscription<geometry_msgs::msg::Twist>(
+      "/cmd_vel", qos, std::bind(&LocomotionNode::onCmdVel, this, std::placeholders::_1));
 
     pub_lowcmd_ = this->create_publisher<unitree_go::msg::LowCmd>("/lowcmd", qos);
 
@@ -74,6 +87,44 @@ public:
       std::bind(&LocomotionNode::onControl, this));
 
     last_mpc_time_ = this->now();
+
+    param_cb_handle_ = this->add_on_set_parameters_callback(
+      [this](const std::vector<rclcpp::Parameter> & params)
+      -> rcl_interfaces::msg::SetParametersResult {
+        for (const auto & param : params) {
+          const auto & name = param.get_name();
+          if (name == "swing_kp") {
+            swing_kp_ = param.as_double();
+          } else if (name == "swing_kd") {
+            swing_kd_ = param.as_double();
+          } else if (name == "x_vel_des_body") {
+            x_vel_des_body_ = param.as_double();
+          } else if (name == "y_vel_des_body") {
+            y_vel_des_body_ = param.as_double();
+          } else if (name == "z_pos_des_body") {
+            z_pos_des_body_ = param.as_double();
+          } else if (name == "yaw_rate_des_body") {
+            yaw_rate_des_body_ = param.as_double();
+          } else if (name == "ground_offset") {
+            ground_offset_ = param.as_double();
+          } else if (name == "swing_height") {
+            swing_height_ = param.as_double();
+          } else if (name == "stance_force_min") {
+            stance_force_min_ = param.as_double();
+          } else if (name == "stance_fallback_force_z") {
+            stance_fallback_force_z_ = param.as_double();
+          }
+        }
+        leg_controller_.setSwingGains(swing_kp_, swing_kd_);
+        if (gait_) {
+          gait_->setGroundOffset(ground_offset_);
+          gait_->setSwingHeight(swing_height_);
+        }
+        stance_fallback_force_ = Eigen::Vector3d(0.0, 0.0, stance_fallback_force_z_);
+        rcl_interfaces::msg::SetParametersResult result;
+        result.successful = true;
+        return result;
+      });
   }
 
 private:
@@ -139,6 +190,12 @@ private:
     last_mpc_time_ = this->now();
   }
 
+  void onCmdVel(const geometry_msgs::msg::Twist::SharedPtr msg)
+  {
+    x_vel_des_body_ = msg->linear.x;
+    yaw_rate_des_body_ = msg->angular.z;
+  }
+
   void onControl()
   {
     if (!have_state_ || !sim_time_init_) {
@@ -152,6 +209,18 @@ private:
     {
       std::lock_guard<std::mutex> lock(force_mutex_);
       forces = mpc_force_world_;
+    }
+    bool mpc_alive = have_mpc_ && (this->now() - last_mpc_time_).seconds() <= mpc_timeout_s_;
+    if (mpc_alive && gait_) {
+      const Eigen::Vector4i mask = gait_->computeCurrentMask(time_now_s);
+      for (int i = 0; i < 4; ++i) {
+        if (mask(i) == 1) {
+          const Eigen::Vector3d f_leg = forces.segment<3>(i * 3);
+          if (f_leg.norm() < stance_force_min_) {
+            forces.segment<3>(i * 3) = stance_fallback_force_;
+          }
+        }
+      }
     }
 
     {
@@ -185,7 +254,6 @@ private:
 
     tau_hold_ = tau_raw_.cwiseMin(tau_lim_).cwiseMax(-tau_lim_);
 
-    bool mpc_alive = have_mpc_ && (this->now() - last_mpc_time_).seconds() <= mpc_timeout_s_;
     bool forces_nonzero = forces.cwiseAbs().maxCoeff() > force_eps_;
 
     if (mpc_alive || forces_nonzero) {
@@ -215,6 +283,13 @@ private:
   double y_vel_des_body_{0.0};
   double z_pos_des_body_{0.27};
   double yaw_rate_des_body_{0.0};
+  double swing_kp_{400.0};
+  double swing_kd_{75.0};
+  double ground_offset_{0.02};
+  double swing_height_{0.1};
+  double stance_force_min_{1.0};
+  double stance_fallback_force_z_{0.0};
+  Eigen::Vector3d stance_fallback_force_{Eigen::Vector3d::Zero()};
 
   std::unique_ptr<PinocchioModel> go2_;
   std::unique_ptr<Gait> gait_;
@@ -248,8 +323,10 @@ private:
 
   rclcpp::Subscription<go2_msgs::msg::QDq>::SharedPtr sub_state_;
   rclcpp::Subscription<go2_msgs::msg::MpcForces>::SharedPtr sub_mpc_;
+  rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr sub_cmd_vel_;
   rclcpp::Publisher<unitree_go::msg::LowCmd>::SharedPtr pub_lowcmd_;
   rclcpp::TimerBase::SharedPtr timer_;
+  rclcpp::node_interfaces::OnSetParametersCallbackHandle::SharedPtr param_cb_handle_;
 };
 
 }  // namespace locomotion_mpc
