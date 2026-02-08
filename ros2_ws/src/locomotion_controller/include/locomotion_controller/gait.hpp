@@ -11,7 +11,14 @@ namespace locomotion_mpc {
 
 class Gait {
 public:
-  Gait(double frequency_hz, double duty);
+  Gait(double frequency_hz, double duty,
+       double ground_offset = 0.02,
+       double swing_height = 0.1);
+
+  void setGroundOffset(double ground_offset) { ground_offset_ = ground_offset; }
+  void setSwingHeight(double swing_height) { swing_height_ = swing_height; }
+  double groundOffset() const { return ground_offset_; }
+  double swingHeight() const { return swing_height_; }
 
   double gaitHz() const { return gait_hz_; }
   double duty() const { return gait_duty_; }
@@ -36,6 +43,8 @@ private:
   double gait_period_{1.0};
   double stance_time_{0.0};
   double swing_time_{0.0};
+  double ground_offset_{0.02};
+  double swing_height_{0.1};
 };
 
 }  // namespace locomotion_mpc
