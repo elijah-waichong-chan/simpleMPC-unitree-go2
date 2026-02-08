@@ -22,6 +22,7 @@ struct LegOutput {
 class LegController {
 public:
   LegController();
+  void setSwingGains(double kp, double kd);
 
   LegOutput computeLegTorque(const std::string & leg,
                              PinocchioModel & go2,
@@ -46,6 +47,9 @@ private:
   std::array<double, 4> takeoff_time_{};
   std::array<SwingTrajectory, 4> swing_traj_{};
   std::array<Eigen::Vector3d, 4> td_pos_{};
+
+  double swing_kp_{400.0};
+  double swing_kd_{75.0};
 };
 
 }  // namespace locomotion_mpc
