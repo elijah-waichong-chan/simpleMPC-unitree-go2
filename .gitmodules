@@ -1,0 +1,3 @@
+[submodule "ros2_ws/src/go2_odometry"]
+	path = ros2_ws/src/go2_odometry
+	url = https://github.com/inria-paris-robotics-lab/go2_odometry.git
