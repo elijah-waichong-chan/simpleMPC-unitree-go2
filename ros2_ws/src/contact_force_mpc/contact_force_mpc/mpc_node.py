@@ -12,6 +12,7 @@ from contact_force_mpc.gait import Gait
 from go2_msgs.msg import QDq, MpcForces
 from std_msgs.msg import Float64 # type: ignore
 from rclpy.qos import qos_profile_sensor_data # type: ignore
+from geometry_msgs.msg import Twist
 
 
 from threading import Lock
@@ -42,11 +43,11 @@ class MPCNode(Node):
         self.last_update_time = None
 
         # Models
-        self.go2_mpc = PinGo2Model()
-        self.traj = ComTraj(self.go2_mpc)
+        self.go2 = PinGo2Model()
+        self.traj = ComTraj(self.go2)
         self.gait = Gait(self.gait_hz, self.gait_duty)
         self.traj.generate_traj(
-            self.go2_mpc,
+            self.go2,
             self.gait,
             0.0,
             self.x_vel_des_body,
@@ -55,11 +56,25 @@ class MPCNode(Node):
             self.yaw_rate_des_body,
             time_step=self.mpc_dt,
         )
-        self.mpc = CentroidalMPC(self.go2_mpc, self.traj)
+        # Cost matrix Q (diag) as a parameter
+        default_q = [1.0, 1.0, 50.0, 10.0, 20.0, 1.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0]
+        cost_q = self.declare_parameter("cost_q", default_q).value
+        try:
+            cost_q = [float(x) for x in cost_q]
+        except Exception:
+            self.get_logger().warn("cost_q parameter is invalid; using default.")
+            cost_q = default_q
+        if len(cost_q) != len(default_q):
+            self.get_logger().warn(
+                f"cost_q length {len(cost_q)} != {len(default_q)}; using default.")
+            cost_q = default_q
+        self.cost_q_diag = cost_q
+        self.mpc = CentroidalMPC(self.go2, self.traj, q_diag=self.cost_q_diag)
 
         # ROS pub/sub
         self.pub_mpc = self.create_publisher(MpcForces, "/mpc_forces", qos_profile_sensor_data)
         self.sub_robotstate = self.create_subscription(QDq, "/qdq", self.store_state, qos_profile_sensor_data)
+        self.sub_cmd_vel = self.create_subscription(Twist, "/cmd_vel", self.store_cmd_vel, qos_profile_sensor_data)
         self.mpc_loop_ms = self.create_publisher(Float64, "/timing/mpc_loop_ms", 10)
 
         # Timer
@@ -69,6 +84,10 @@ class MPCNode(Node):
         self._go2_lock = Lock()
 
         self.get_logger().info("MPC node is running...")
+
+    def store_cmd_vel(self, msg: Twist):
+        self.x_vel_des_body = float(msg.linear.x)
+        self.yaw_rate_des_body = float(msg.angular.z)
 
     def _pub_ms(self, pub, ms: float):
         m = Float64()
@@ -98,7 +117,7 @@ class MPCNode(Node):
             q_pin = np.concatenate([self.q[0:3], [qx, qy, qz, qw], self.q[7:]])
             dq_pin = np.concatenate([v_body, w_body, self.dq[6:]])
 
-            self.go2_mpc.update_model(q_pin, dq_pin)
+            self.go2.update_model(q_pin, dq_pin)
 
     def mpc_step(self):
         t0 = time.perf_counter()
@@ -114,7 +133,7 @@ class MPCNode(Node):
 
         with self._go2_lock:
             self.traj.generate_traj(
-                self.go2_mpc,
+                self.go2,
                 self.gait,
                 time_now_s,
                 self.x_vel_des_body,
@@ -124,7 +143,7 @@ class MPCNode(Node):
                 time_step=self.mpc_dt,
             )
 
-            sol = self.mpc.solve_QP(self.go2_mpc, self.traj, False)
+            sol = self.mpc.solve_QP(self.go2, self.traj, False)
 
         N = self.traj.N
         w_opt = sol["x"].full().flatten()
