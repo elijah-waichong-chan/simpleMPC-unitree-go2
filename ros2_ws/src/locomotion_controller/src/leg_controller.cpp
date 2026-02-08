@@ -4,15 +4,16 @@
 
 namespace locomotion_mpc {
 
-namespace {
-constexpr double kSwingKp = 200.0;
-constexpr double kSwingKd = 35.0;
-}
-
 LegController::LegController()
 {
   takeoff_time_.fill(0.0);
   td_pos_.fill(Eigen::Vector3d::Zero());
+}
+
+void LegController::setSwingGains(double kp, double kd)
+{
+  swing_kp_ = kp;
+  swing_kd_ = kd;
 }
 
 LegController::LegIndex LegController::legIndexFromName(const std::string & leg)
@@ -58,8 +59,26 @@ LegOutput LegController::computeLegTorque(const std::string & leg,
     Eigen::Vector3d pos_error = foot_pos_des - foot_pos_now;
     Eigen::Vector3d vel_error = foot_vel_des - foot_vel_now;
 
-    Eigen::Vector3d force = kSwingKp * pos_error + kSwingKd * vel_error;
-    tau_cmd = J_foot_world.transpose() * force;
+    const Eigen::Matrix<double, 3, Eigen::Dynamic> J_full =
+      go2.computeFullFootJacobianWorld(leg);
+    const Eigen::Vector3d Jdot_dq = go2.computeJdotDqWorld(leg);
+
+    Eigen::VectorXd g;
+    Eigen::MatrixXd C;
+    Eigen::MatrixXd M;
+    go2.computeDynamicsTerms(g, C, M);
+
+    const Eigen::VectorXd dq = go2.currentConfig().getDq();
+    const Eigen::VectorXd cdq_g = C * dq + g;
+    const int joint_start = 6 + static_cast<int>(idx) * 3;
+    const Eigen::Vector3d cdq_g_leg = cdq_g.segment<3>(joint_start);
+
+    const Eigen::MatrixXd Minv_Jt = M.ldlt().solve(J_full.transpose());
+    const Eigen::Matrix3d Lambda = (J_full * Minv_Jt).inverse();
+    const Eigen::Vector3d f_ff = Lambda * (foot_acc_des - Jdot_dq);
+
+    Eigen::Vector3d force = swing_kp_ * pos_error + swing_kd_ * vel_error + f_ff;
+    tau_cmd = J_foot_world.transpose() * force + cdq_g_leg;
   } else {
     tau_cmd = J_foot_world.transpose() * (-contact_force);
   }
