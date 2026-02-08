@@ -48,6 +48,9 @@ target_link_libraries(locomotion_node rclcpp::rclcpp)
 # Ensure Pinocchio symbols are resolved when linking executables.
 target_link_libraries(locomotion_node pinocchio::pinocchio pinocchio::pinocchio_parsers)
 
+# Ensure message typesupport for go2_msgs is linked.
+target_link_libraries(locomotion_node go2_msgs::go2_msgs__rosidl_typesupport_cpp)
+
 ament_target_dependencies(locomotion_node
   rclcpp
   go2_msgs
