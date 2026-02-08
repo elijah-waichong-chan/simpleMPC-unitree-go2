@@ -1,1 +1,0 @@
-/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_go/rosidl_generator_c/unitree_go/msg/detail/sport_mode_state__struct.h

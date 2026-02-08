@@ -1,1 +1,0 @@
-/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_go/rosidl_generator_py/unitree_go/msg/_height_map_s.c

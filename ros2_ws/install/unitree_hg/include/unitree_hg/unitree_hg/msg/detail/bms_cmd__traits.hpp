@@ -1,1 +1,0 @@
-/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_hg/rosidl_generator_cpp/unitree_hg/msg/detail/bms_cmd__traits.hpp

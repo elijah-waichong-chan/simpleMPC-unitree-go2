@@ -1,1 +1,0 @@
-/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_api/rosidl_generator_c/unitree_api/msg/detail/response_header__functions.h

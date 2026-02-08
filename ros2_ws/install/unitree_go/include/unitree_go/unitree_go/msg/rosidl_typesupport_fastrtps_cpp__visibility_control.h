@@ -1,1 +1,0 @@
-/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_go/rosidl_typesupport_fastrtps_cpp/unitree_go/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h

@@ -1,1 +1,0 @@
-/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_api/rosidl_typesupport_introspection_cpp/unitree_api/msg/detail/request_identity__rosidl_typesupport_introspection_cpp.hpp

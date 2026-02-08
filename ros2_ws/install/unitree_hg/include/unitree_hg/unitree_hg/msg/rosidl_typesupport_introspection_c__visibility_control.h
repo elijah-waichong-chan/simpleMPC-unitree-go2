@@ -1,1 +1,0 @@
-/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_hg/rosidl_typesupport_introspection_c/unitree_hg/msg/rosidl_typesupport_introspection_c__visibility_control.h

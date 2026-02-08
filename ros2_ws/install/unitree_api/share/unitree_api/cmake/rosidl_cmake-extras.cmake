@@ -1,1 +1,0 @@
-/home/elijah/go2-convex-mpc/ros2_ws/build/unitree_api/rosidl_cmake/rosidl_cmake-extras.cmake
