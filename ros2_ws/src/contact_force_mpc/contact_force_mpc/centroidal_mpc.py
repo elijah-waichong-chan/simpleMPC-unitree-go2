@@ -9,8 +9,9 @@ import time
 # Model Predictive Control Setting
 # --------------------------------------------------------------------------------
 
-COST_MATRIX_Q = np.diag([1, 1, 50,  10, 20, 1,  2, 2, 1,  1, 1, 1])     # State cost weight matrix
-COST_MATRIX_R = np.diag([1e-5] * 12)                                    # Input cost weight matrix
+COST_Q_DIAG = np.array([1, 1, 50,  10, 20, 1,  2, 2, 1,  1, 1, 1], dtype=float)
+COST_MATRIX_Q = np.diag(COST_Q_DIAG)     # State cost weight matrix
+COST_MATRIX_R = np.diag([5e-5] * 12)                                    # Input cost weight matrix
 
 MU = 0.8    # Friction coefficient
 NX = 12     # State size (6-DOF 12 states)
@@ -38,9 +39,15 @@ OPTS = {
 SOLVER_NAME: str = "osqp"
 
 class CentroidalMPC:
-    def __init__(self, go2:PinGo2Model, traj: ComTraj):
-        self.Q = COST_MATRIX_Q 
-        self.R = COST_MATRIX_R 
+    def __init__(self, go2:PinGo2Model, traj: ComTraj, q_diag=None):
+        if q_diag is None:
+            self.Q = COST_MATRIX_Q
+        else:
+            q_diag = np.asarray(q_diag, dtype=float).reshape(-1)
+            if q_diag.size != NX:
+                raise ValueError(f"q_diag must have length {NX}, got {q_diag.size}")
+            self.Q = np.diag(q_diag)
+        self.R = COST_MATRIX_R
         self.nvars = traj.N * NX + traj.N * NU    # Total number of decision variables                          
         self.solve_time: float = 0 
         self.N = traj.N
