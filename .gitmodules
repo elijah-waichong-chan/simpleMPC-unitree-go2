@@ -1,6 +1,6 @@
 [submodule "ros2_ws/src/go2_odometry"]
 	path = ros2_ws/src/go2_odometry
-	url = https://github.com/inria-paris-robotics-lab/go2_odometry.git
+	url = https://github.com/elijah-waichong-chan/go2_odometry.git
 [submodule "ros2_ws/src/unitree_ros2"]
 	path = ros2_ws/src/unitree_ros2
 	url = https://github.com/unitreerobotics/unitree_ros2
