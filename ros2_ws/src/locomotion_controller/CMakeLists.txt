@@ -35,8 +35,13 @@ target_link_libraries(locomotion_mpc_core
 )
 
 add_executable(locomotion_node src/locomotion_node.cpp)
+add_executable(stand_up_init src/stand_up_init.cpp)
 
 set_target_properties(locomotion_mpc_core locomotion_node PROPERTIES
+  CXX_STANDARD 17
+  CXX_STANDARD_REQUIRED YES
+)
+set_target_properties(stand_up_init PROPERTIES
   CXX_STANDARD 17
   CXX_STANDARD_REQUIRED YES
 )
@@ -44,6 +49,8 @@ set_target_properties(locomotion_mpc_core locomotion_node PROPERTIES
 target_link_libraries(locomotion_node locomotion_mpc_core)
 
 target_link_libraries(locomotion_node rclcpp::rclcpp)
+
+target_link_libraries(stand_up_init rclcpp::rclcpp)
 
 # Ensure Pinocchio symbols are resolved when linking executables.
 target_link_libraries(locomotion_node pinocchio::pinocchio pinocchio::pinocchio_parsers)
@@ -56,10 +63,15 @@ ament_target_dependencies(locomotion_node
   go2_msgs
   unitree_go
 )
+ament_target_dependencies(stand_up_init
+  rclcpp
+  unitree_go
+)
 
 install(TARGETS
   locomotion_mpc_core
   locomotion_node
+  stand_up_init
   EXPORT export_${PROJECT_NAME}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
