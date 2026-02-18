@@ -120,12 +120,30 @@ class QdqEstBridge(Node):
         msg.q[5] = ori.y
         msg.q[6] = ori.z
 
-        # Base twist
+        # Base twist: convert base-frame linear velocity to world frame
         lin = odom.twist.twist.linear
         ang = odom.twist.twist.angular
-        msg.dq[0] = lin.x
-        msg.dq[1] = lin.y
-        msg.dq[2] = lin.z
+        qw, qx, qy, qz = ori.w, ori.x, ori.y, ori.z
+        r00 = 1.0 - 2.0 * (qy * qy + qz * qz)
+        r01 = 2.0 * (qx * qy - qz * qw)
+        r02 = 2.0 * (qx * qz + qy * qw)
+        r10 = 2.0 * (qx * qy + qz * qw)
+        r11 = 1.0 - 2.0 * (qx * qx + qz * qz)
+        r12 = 2.0 * (qy * qz - qx * qw)
+        r20 = 2.0 * (qx * qz - qy * qw)
+        r21 = 2.0 * (qy * qz + qx * qw)
+        r22 = 1.0 - 2.0 * (qx * qx + qy * qy)
+
+        vx_b = lin.x
+        vy_b = lin.y
+        vz_b = lin.z
+        vx_w = r00 * vx_b + r01 * vy_b + r02 * vz_b
+        vy_w = r10 * vx_b + r11 * vy_b + r12 * vz_b
+        vz_w = r20 * vx_b + r21 * vy_b + r22 * vz_b
+
+        msg.dq[0] = vx_w
+        msg.dq[1] = vy_w
+        msg.dq[2] = vz_w
         msg.dq[3] = ang.x
         msg.dq[4] = ang.y
         msg.dq[5] = ang.z
