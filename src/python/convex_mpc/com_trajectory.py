@@ -269,18 +269,72 @@ class ComTraj:
             0, 0, 0 
             ])
 
-    def _discreteDynamics(self, dt):
+    def _discreteDynamics(self, dt: float):
+        N = self.N
+        m = self.m
+        I_inv = np.linalg.inv(self.I_com_world)
 
-        self.Bd = np.zeros((self.N, 12, 12))
+        # Use your same yaw-avg rotation for rpy integration
+        yaw_avg = float(np.average(self.rpy_traj_world[2, :]))
+        cy, sy = np.cos(yaw_avg), np.sin(yaw_avg)
+        RzT = np.array([[cy, sy, 0.0],
+                        [-sy, cy, 0.0],
+                        [0.0, 0.0, 1.0]], dtype=float)
 
-        # Discretize Ac and Bc
-        for i in range(self.N): 
-            self.Ad, self.Bd[i], *_ = cont2discrete((self.Ac, self.Bc[i], np.eye(12), np.zeros((12, 12))), dt, method='zoh')
+        # ---- Ad ----
+        Ad = np.eye(12, dtype=float)
+        Ad[0:3, 6:9] = dt * np.eye(3)        # p <- v
+        Ad[3:6, 9:12] = dt * RzT             # rpy <- omega (approx)
+        self.Ad = Ad
 
-        # Discretize gc
-        n_steps = 50
-        tau = np.linspace(0, dt, n_steps)
-        exp_terms = [expm(self.Ac * t) @ self.gc for t in tau]
-        gd = np.trapz(np.stack(exp_terms, axis=1), tau, axis=1)
+        # ---- gd ---- (gravity only affects position/velocity)
+        g = np.array([0.0, 0.0, -9.81], dtype=float)
+        gd = np.zeros((12, 1), dtype=float)
+        gd[0:3, 0] = 0.5 * g * dt * dt       # p += 1/2 g dt^2
+        gd[6:9, 0] = g * dt                  # v += g dt
+        self.gd = gd
 
-        self.gd = gd.reshape(-1, 1)
+        # ---- Bd ----
+        Bd = np.zeros((N, 12, 12), dtype=float)
+
+        Bp = (0.5 * dt * dt / m) * np.eye(3) # p from forces
+        Bv = (dt / m) * np.eye(3)            # v from forces
+
+        for i in range(N):
+            r1 = self.r_fl_foot_world[:, i]
+            r2 = self.r_fr_foot_world[:, i]
+            r3 = self.r_rl_foot_world[:, i]
+            r4 = self.r_rr_foot_world[:, i]
+
+            W1 = I_inv @ self._skew(r1)
+            W2 = I_inv @ self._skew(r2)
+            W3 = I_inv @ self._skew(r3)
+            W4 = I_inv @ self._skew(r4)
+
+            Bi = Bd[i]
+
+            # p block
+            Bi[0:3, 0:3]   = Bp
+            Bi[0:3, 3:6]   = Bp
+            Bi[0:3, 6:9]   = Bp
+            Bi[0:3, 9:12]  = Bp
+
+            # v block
+            Bi[6:9, 0:3]   = Bv
+            Bi[6:9, 3:6]   = Bv
+            Bi[6:9, 6:9]   = Bv
+            Bi[6:9, 9:12]  = Bv
+
+            # omega block
+            Bi[9:12, 0:3]  = dt * W1
+            Bi[9:12, 3:6]  = dt * W2
+            Bi[9:12, 6:9]  = dt * W3
+            Bi[9:12, 9:12] = dt * W4
+
+            # rpy also gets input through omega integration (2nd order term)
+            Bi[3:6, 0:3]   = 0.5 * dt * dt * (RzT @ W1)
+            Bi[3:6, 3:6]   = 0.5 * dt * dt * (RzT @ W2)
+            Bi[3:6, 6:9]   = 0.5 * dt * dt * (RzT @ W3)
+            Bi[3:6, 9:12]  = 0.5 * dt * dt * (RzT @ W4)
+
+        self.Bd = Bd
