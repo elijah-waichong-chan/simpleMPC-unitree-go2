@@ -14,6 +14,7 @@
 #include <cmath>
 #include <cstring>
 #include <mutex>
+#include <random>
 #include <string>
 #include <thread>
 #include <unordered_map>
@@ -48,12 +49,24 @@ public:
     declare_parameter<std::string>("xml_path", "/home/elijah/go2-convex-mpc/models/MJCF/go2/scene.xml");
     declare_parameter<bool>("enable_viewer", true);
     declare_parameter<bool>("freeze_base", false);
+    declare_parameter<bool>("debug_print", true);
+    declare_parameter<bool>("debug_publish", true);
+    declare_parameter<double>("foot_force_lpf_alpha", 0.1);
+    declare_parameter<double>("imu_gyro_noise_std", 0.0);
+    declare_parameter<double>("imu_acc_noise_std", 0.0);
+    declare_parameter<int>("imu_noise_seed", 0);
     declare_parameter<double>("render_hz", 30.0);
     declare_parameter<double>("sim_hz", sim_hz_);
     declare_parameter<double>("pub_hz", pub_hz_);
     xml_path_ = get_parameter("xml_path").as_string();
     enable_viewer_ = get_parameter("enable_viewer").as_bool();
     freeze_base_ = get_parameter("freeze_base").as_bool();
+    debug_print_ = get_parameter("debug_print").as_bool();
+    debug_publish_ = get_parameter("debug_publish").as_bool();
+    foot_force_lpf_alpha_ = get_parameter("foot_force_lpf_alpha").as_double();
+    imu_gyro_noise_std_ = get_parameter("imu_gyro_noise_std").as_double();
+    imu_acc_noise_std_ = get_parameter("imu_acc_noise_std").as_double();
+    imu_noise_seed_ = get_parameter("imu_noise_seed").as_int();
     render_hz_ = get_parameter("render_hz").as_double();
     sim_hz_ = get_parameter("sim_hz").as_double();
     pub_hz_ = get_parameter("pub_hz").as_double();
@@ -67,6 +80,12 @@ public:
     sim_dt_ = 1.0 / sim_hz_;
     if (render_hz_ < 0.0) {
       render_hz_ = 0.0;
+    }
+    if (imu_noise_seed_ == 0) {
+      std::random_device rd;
+      rng_.seed(rd());
+    } else {
+      rng_.seed(static_cast<uint32_t>(imu_noise_seed_));
     }
 
     // Load MuJoCo
@@ -84,6 +103,7 @@ public:
       model_ = nullptr;
       throw std::runtime_error("Failed to allocate mjData.");
     }
+    
     render_data_ = mj_makeData(model_);
     if (!render_data_) {
       mj_deleteData(data_);
@@ -144,21 +164,23 @@ public:
     }
 
     // ROS pub/sub
-    pub_lowstate_ = create_publisher<unitree_go::msg::LowState>("/lowstate", rclcpp::SensorDataQoS());
+    pub_lowstate_ = create_publisher<unitree_go::msg::LowState>("/lowstate", 10);
     pub_qdq_      = create_publisher<go2_msgs::msg::QDq>("/qdq", rclcpp::SensorDataQoS());
 
-    auto tqos = rclcpp::SensorDataQoS();
-    pub_outer_loop_ms_      = create_publisher<std_msgs::msg::Float64>("/timing/outer_loop_ms", tqos);
-    pub_physics_step_hz_    = create_publisher<std_msgs::msg::Float64>("/timing/physics_step_hz", tqos);
-    pub_physics_step_ms_    = create_publisher<std_msgs::msg::Float64>("/timing/physics_step_ms", tqos);
-    pub_steps_per_loop_     = create_publisher<std_msgs::msg::Float64>("/timing/steps_per_outer_loop", tqos);
-    pub_rtf_                = create_publisher<std_msgs::msg::Float64>("/timing/rtf", tqos);
-    pub_storing_cmd_ms_     = create_publisher<std_msgs::msg::Float64>("/timing/storing_cmd_ms", tqos);
-    pub_heartbeat_          = create_publisher<std_msgs::msg::Float64>("/timing/heartbeat", tqos);
-    heartbeat_timer_ = create_wall_timer(
-      500ms,
-      [this]() { pub_f64(pub_heartbeat_, this->now().seconds()); }
-    );
+    if (debug_publish_) {
+      auto tqos = rclcpp::SensorDataQoS();
+      pub_outer_loop_ms_      = create_publisher<std_msgs::msg::Float64>("/timing/outer_loop_ms", tqos);
+      pub_physics_step_hz_    = create_publisher<std_msgs::msg::Float64>("/timing/physics_step_hz", tqos);
+      pub_physics_step_ms_    = create_publisher<std_msgs::msg::Float64>("/timing/physics_step_ms", tqos);
+      pub_steps_per_loop_     = create_publisher<std_msgs::msg::Float64>("/timing/steps_per_outer_loop", tqos);
+      pub_rtf_                = create_publisher<std_msgs::msg::Float64>("/timing/rtf", tqos);
+      pub_storing_cmd_ms_     = create_publisher<std_msgs::msg::Float64>("/timing/storing_cmd_ms", tqos);
+      pub_heartbeat_          = create_publisher<std_msgs::msg::Float64>("/timing/heartbeat", tqos);
+      heartbeat_timer_ = create_wall_timer(
+        500ms,
+        [this]() { pub_f64(pub_heartbeat_, this->now().seconds()); }
+      );
+    }
 
     sub_cmd_ = create_subscription<unitree_go::msg::LowCmd>(
       "/lowcmd", rclcpp::SensorDataQoS(),
@@ -171,10 +193,12 @@ public:
       for (int i = 0; i < 7; ++i) base_qpos_[i] = data_->qpos[i];
     }
 
-    RCLCPP_INFO(get_logger(),
-                "sim_hz=%.1f pub_hz=%.1f pub_decim=%d sim_dt=%.6f viewer=%s render_hz=%.1f freeze_base=%s",
-                sim_hz_, pub_hz_, pub_decim_, sim_dt_, enable_viewer_ ? "true" : "false",
-                render_hz_, freeze_base_ ? "true" : "false");
+    if (debug_print_) {
+      RCLCPP_INFO(get_logger(),
+                  "sim_hz=%.1f pub_hz=%.1f pub_decim=%d sim_dt=%.6f viewer=%s render_hz=%.1f freeze_base=%s",
+                  sim_hz_, pub_hz_, pub_decim_, sim_dt_, enable_viewer_ ? "true" : "false",
+                  render_hz_, freeze_base_ ? "true" : "false");
+    }
   }
 
   ~MuJoCoRobot() override
@@ -196,6 +220,9 @@ public:
     std::lock_guard<std::mutex> lk(mj_mtx_);
     return static_cast<double>(data_->time);
   }
+
+  bool debug_print() const { return debug_print_; }
+  bool debug_publish() const { return debug_publish_; }
 
   uint64_t lowcmd_count() const
   {
@@ -318,29 +345,73 @@ public:
     msg.imu_state.gyroscope[0] = static_cast<double>(gyro_xyz[0]);
     msg.imu_state.gyroscope[1] = static_cast<double>(gyro_xyz[1]);
     msg.imu_state.gyroscope[2] = static_cast<double>(gyro_xyz[2]);
+    if (imu_gyro_noise_std_ > 0.0) {
+      msg.imu_state.gyroscope[0] += sample_noise_(imu_gyro_noise_std_);
+      msg.imu_state.gyroscope[1] += sample_noise_(imu_gyro_noise_std_);
+      msg.imu_state.gyroscope[2] += sample_noise_(imu_gyro_noise_std_);
+    }
 
     msg.imu_state.accelerometer[0] = static_cast<double>(acc_xyz[0]);
     msg.imu_state.accelerometer[1] = static_cast<double>(acc_xyz[1]);
     msg.imu_state.accelerometer[2] = static_cast<double>(acc_xyz[2]);
+    if (imu_acc_noise_std_ > 0.0) {
+      msg.imu_state.accelerometer[0] += sample_noise_(imu_acc_noise_std_);
+      msg.imu_state.accelerometer[1] += sample_noise_(imu_acc_noise_std_);
+      msg.imu_state.accelerometer[2] += sample_noise_(imu_acc_noise_std_);
+    }
 
     bool contact_fr = false, contact_fl = false, contact_rr = false, contact_rl = false;
     const int gid_fr = foot_geoms_.at("FR");
     const int gid_fl = foot_geoms_.at("FL");
     const int gid_rr = foot_geoms_.at("RR");
     const int gid_rl = foot_geoms_.at("RL");
+    const int gid_floor = mj_name2id(model_, mjOBJ_GEOM, "floor");
+    if (gid_floor < 0) {
+      static bool warned_missing_floor = false;
+      if (!warned_missing_floor) {
+        RCLCPP_WARN(get_logger(),
+                    "Geom 'floor' not found; counting any foot contact.");
+        warned_missing_floor = true;
+      }
+    }
 
     for (int i = 0; i < data_->ncon; ++i) {
       const mjContact & c = data_->contact[i];
-      if (c.geom1 == gid_fr || c.geom2 == gid_fr) contact_fr = true;
-      if (c.geom1 == gid_fl || c.geom2 == gid_fl) contact_fl = true;
-      if (c.geom1 == gid_rr || c.geom2 == gid_rr) contact_rr = true;
-      if (c.geom1 == gid_rl || c.geom2 == gid_rl) contact_rl = true;
+      auto is_contact = [&](int foot_gid) {
+        if (gid_floor < 0) {
+          return (c.geom1 == foot_gid || c.geom2 == foot_gid);
+        }
+        return (c.geom1 == foot_gid && c.geom2 == gid_floor) ||
+               (c.geom2 == foot_gid && c.geom1 == gid_floor);
+      };
+      if (is_contact(gid_fr)) contact_fr = true;
+      if (is_contact(gid_fl)) contact_fl = true;
+      if (is_contact(gid_rr)) contact_rr = true;
+      if (is_contact(gid_rl)) contact_rl = true;
     }
 
-    msg.foot_force[0] = contact_fr ? 1 : 0;
-    msg.foot_force[1] = contact_fl ? 1 : 0;
-    msg.foot_force[2] = contact_rr ? 1 : 0;
-    msg.foot_force[3] = contact_rl ? 1 : 0;
+    const float raw_forces[4] = {
+      contact_fr ? 30.0f : 0.0f,
+      contact_fl ? 30.0f : 0.0f,
+      contact_rr ? 30.0f : 0.0f,
+      contact_rl ? 30.0f : 0.0f
+    };
+
+    double alpha = std::clamp(foot_force_lpf_alpha_, 0.0, 1.0);
+    if (!foot_force_lpf_init_ || alpha <= 0.0) {
+      for (int i = 0; i < 4; ++i) foot_force_lpf_[i] = raw_forces[i];
+      foot_force_lpf_init_ = true;
+    } else {
+      for (int i = 0; i < 4; ++i) {
+        foot_force_lpf_[i] =
+          static_cast<float>((1.0 - alpha) * foot_force_lpf_[i] + alpha * raw_forces[i]);
+      }
+    }
+
+    msg.foot_force[0] = foot_force_lpf_[0];
+    msg.foot_force[1] = foot_force_lpf_[1];
+    msg.foot_force[2] = foot_force_lpf_[2];
+    msg.foot_force[3] = foot_force_lpf_[3];
     msg.foot_force_est = msg.foot_force;
 
     pub_lowstate_->publish(msg);
@@ -372,6 +443,9 @@ public:
                              double steps_per_outer_loop,
                              double rtf)
   {
+    if (!debug_publish_) {
+      return;
+    }
     pub_f64(pub_outer_loop_ms_, outer_loop_ms_avg);
     pub_f64(pub_physics_step_hz_, physics_step_hz);
     pub_f64(pub_physics_step_ms_, physics_step_ms);
@@ -422,7 +496,9 @@ private:
     lowcmd_count_.fetch_add(1, std::memory_order_relaxed);
 
     // pulse: publish 1.0 each time a cmd is received
-    pub_f64(pub_storing_cmd_ms_, 1.0);
+    if (debug_publish_ && pub_storing_cmd_ms_) {
+      pub_f64(pub_storing_cmd_ms_, 1.0);
+    }
   }
 
   // Actuators / torques
@@ -536,6 +612,12 @@ private:
   }
 
 private:
+  double sample_noise_(double stddev)
+  {
+    if (stddev <= 0.0) return 0.0;
+    return stddev * normal_(rng_);
+  }
+
   // MuJoCo
   mjModel * model_{nullptr};
   mjData  * data_{nullptr};
@@ -593,6 +675,16 @@ private:
   std::atomic<uint64_t> lowcmd_count_{0};
 
   // Viewer
+  bool debug_print_{true};
+  bool debug_publish_{true};
+  double foot_force_lpf_alpha_{0.1};
+  bool foot_force_lpf_init_{false};
+  std::array<float, 4> foot_force_lpf_{};
+  double imu_gyro_noise_std_{0.0};
+  double imu_acc_noise_std_{0.0};
+  int imu_noise_seed_{0};
+  std::mt19937 rng_{};
+  std::normal_distribution<double> normal_{0.0, 1.0};
   bool enable_viewer_{true};
   bool freeze_base_{false};
   double render_hz_{30.0};
@@ -680,7 +772,7 @@ int main(int argc, char ** argv)
       loop_acc_n += 1;
 
       // 1 Hz-ish log: sim_time + lowcmd hz (proper 1-second window)
-      {
+      if (node->debug_print()) {
         const auto now_tp = std::chrono::steady_clock::now();
         const double dt = std::chrono::duration<double>(now_tp - cmd_last_tp).count();
         if (dt >= 1.0) {
@@ -713,7 +805,7 @@ int main(int argc, char ** argv)
         std::this_thread::sleep_for(std::chrono::duration<double>(sleep_s));
       } else {
         const double lag_ms = (-sleep_s) * 1000.0;
-        if (lag_ms > 1.0) {
+        if (lag_ms > 1.0 && node->debug_print()) {
           RCLCPP_WARN_THROTTLE(node->get_logger(), *node->get_clock(), 2000,
             "Sim is behind realtime by %.3f ms", lag_ms);
         }
@@ -723,7 +815,7 @@ int main(int argc, char ** argv)
       // Publish timing window at ~10 Hz
       const auto tel_now = std::chrono::steady_clock::now();
       const double tel_wall_dt = std::chrono::duration<double>(tel_now - tel_t0).count();
-      if (tel_wall_dt >= 0.1) {
+      if (tel_wall_dt >= 0.1 && node->debug_publish()) {
         const double tel_sim1 = node->sim_time();
         const double tel_sim_dt = tel_sim1 - tel_sim0;
 
