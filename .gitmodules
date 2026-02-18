@@ -1,9 +1,12 @@
 [submodule "ros2_ws/src/go2_odometry"]
 	path = ros2_ws/src/go2_odometry
 	url = https://github.com/inria-paris-robotics-lab/go2_odometry.git
-[submodule "invariant-ekf"]
-	path = invariant-ekf
-	url = https://github.com/inria-paris-robotics-lab/invariant-ekf
 [submodule "ros2_ws/src/unitree_ros2"]
 	path = ros2_ws/src/unitree_ros2
 	url = https://github.com/unitreerobotics/unitree_ros2
+[submodule "ros2_ws/src/unitree_description"]
+	path = ros2_ws/src/unitree_description
+	url = https://github.com/inria-paris-robotics-lab/unitree_description.git
+[submodule "ros2_ws/src/inekf"]
+	path = ros2_ws/src/inekf
+	url = https://github.com/inria-paris-robotics-lab/invariant-ekf
