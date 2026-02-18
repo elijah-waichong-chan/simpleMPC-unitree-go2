@@ -10,7 +10,8 @@ from contact_force_mpc.centroidal_mpc import CentroidalMPC
 from contact_force_mpc.gait import Gait
 
 from go2_msgs.msg import QDq, MpcForces
-from std_msgs.msg import Float64 # type: ignore
+from std_msgs.msg import Float64, Bool # type: ignore
+from rclpy.qos import QoSProfile, QoSHistoryPolicy, QoSDurabilityPolicy, QoSReliabilityPolicy
 from rclpy.qos import qos_profile_sensor_data # type: ignore
 from geometry_msgs.msg import Twist
 
@@ -69,13 +70,28 @@ class MPCNode(Node):
                 f"cost_q length {len(cost_q)} != {len(default_q)}; using default.")
             cost_q = default_q
         self.cost_q_diag = cost_q
+        self.debug_publish = bool(self.declare_parameter("debug_publish", True).value)
         self.mpc = CentroidalMPC(self.go2, self.traj, q_diag=self.cost_q_diag)
+        qdq_topic = str(self.declare_parameter("qdq_topic", "/qdq").value)
 
         # ROS pub/sub
         self.pub_mpc = self.create_publisher(MpcForces, "/mpc_forces", qos_profile_sensor_data)
-        self.sub_robotstate = self.create_subscription(QDq, "/qdq", self.store_state, qos_profile_sensor_data)
+        self.sub_robotstate = self.create_subscription(QDq, qdq_topic, self.store_state, qos_profile_sensor_data)
         self.sub_cmd_vel = self.create_subscription(Twist, "/cmd_vel", self.store_cmd_vel, qos_profile_sensor_data)
+        status_qos = QoSProfile(
+            history=QoSHistoryPolicy.KEEP_LAST,
+            depth=1,
+            durability=QoSDurabilityPolicy.TRANSIENT_LOCAL,
+            reliability=QoSReliabilityPolicy.RELIABLE,
+        )
+        self._inekf_running = False
+        self.sub_inekf_status = self.create_subscription(
+            Bool, "/status/inekf/is_running", self._on_inekf_status, status_qos
+        )
         self.mpc_loop_ms = self.create_publisher(Float64, "/timing/mpc_loop_ms", 10)
+        self._is_running = False
+        self.pub_status = self.create_publisher(Bool, "/status/mpc/is_running", status_qos)
+        self.pub_status.publish(Bool(data=False))
 
         # Timer
         self.mpc_timer = self.create_timer(self.mpc_dt, self.mpc_step)
@@ -90,9 +106,14 @@ class MPCNode(Node):
         self.yaw_rate_des_body = float(msg.angular.z)
 
     def _pub_ms(self, pub, ms: float):
+        if not self.debug_publish:
+            return
         m = Float64()
         m.data = float(ms)
         pub.publish(m)
+
+    def _on_inekf_status(self, msg: Bool):
+        self._inekf_running = bool(msg.data)
 
     def store_state(self, msg: QDq):
         if self.sim_time_t0 is None:
@@ -121,7 +142,7 @@ class MPCNode(Node):
 
     def mpc_step(self):
         t0 = time.perf_counter()
-        if not self._have_state:
+        if not self._have_state or not self._inekf_running:
             return
 
         now = self.get_clock().now()
@@ -159,6 +180,9 @@ class MPCNode(Node):
         msg.forces = force.tolist()
         msg.dt = float(self.mpc_dt)
         self.pub_mpc.publish(msg)
+        if not self._is_running:
+            self._is_running = True
+            self.pub_status.publish(Bool(data=True))
 
         t1 = time.perf_counter()
         self._pub_ms(self.mpc_loop_ms, (t1 - t0) * 1000.0)
