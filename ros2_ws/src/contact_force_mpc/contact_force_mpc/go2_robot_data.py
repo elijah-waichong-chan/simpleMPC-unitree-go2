@@ -12,7 +12,7 @@ from ament_index_python.packages import get_package_share_directory
 
 GO2_SHARE_DIR = get_package_share_directory("go2_description")
 PACKAGE_DIRS = GO2_SHARE_DIR
-URDF_PATH = str(Path(GO2_SHARE_DIR) / "urdf" / "go2_description.urdf")
+URDF_PATH = str(Path(GO2_SHARE_DIR) / "model" / "go2.urdf")
 
 
 class ConfigurationState:
@@ -376,6 +376,5 @@ class PinGo2Model:
             x_traj[:, i+1] = (self.Ad @ x_traj[:, [i]] + self.Bd[i] @ u_i + self.gd).flatten()
 
         return x_init, x_traj
-
 
 
