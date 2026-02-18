@@ -117,12 +117,17 @@ After running each example script, summary plots will be generated
 
 The figures below are generated from running **`examples/ex00_demo.py`**:
 #### MPC Runtime Performance
-<p align="center"> <img src="media/mpc_timing_stats.png" width="700"><br/> <sub> <b>MPC iteration timing.</b> Average model update time ≈ 1.50 ms, average QP solve time ≈ 2.75 ms, total MPC cycle time ≈ 4.25 ms, running comfortably within a 48 Hz real-time budget (20.8 ms). </sub> </p>
+<p align="center"> <img src="media/mpc_timing_stats.png" width="700"><br/> <sub> <b>MPC iteration timing.</b> Average model update time ≈ 1.03 ms, average QP solve time ≈ 1.67 ms, total MPC cycle time ≈ 2.70 ms, running comfortably within a 48 Hz real-time budget (20.8 ms). </sub> </p>
 
 #### MPC State, Force, and Torque Logs
 <p align="center"> <img src="media/mpc_state_force_logs.png" width="900"><br/> <sub> <b>Centroidal MPC logs.</b> Optimized ground reaction forces for all four feet, joint torques, center-of-mass position and velocity, ZYX Euler angles, and body angular velocities during a command-scheduled locomotion sequence. </sub> </p>
 
 ## Updates
+
+02/18/2025
+- Implemented new method to discretize dynamics
+- Iteration speed is 57.4% faster, or roughly 1.57x speedup
+- Fixed quaternion order bug in go2_robot_data
 
 12/24/2025
 - Added URDF and MJCF model to the repo.
