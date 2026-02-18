@@ -1,7 +1,9 @@
 #include <algorithm>
 #include <array>
 #include <chrono>
+#include <cstdint>
 #include <cstdlib>
+#include <cstring>
 #include <filesystem>
 #include <mutex>
 #include <string>
@@ -15,6 +17,7 @@
 #include "geometry_msgs/msg/twist.hpp"
 #include "go2_msgs/msg/mpc_forces.hpp"
 #include "go2_msgs/msg/q_dq.hpp"
+#include "std_msgs/msg/bool.hpp"
 #include "unitree_go/msg/low_cmd.hpp"
 
 #include "locomotion_controller/gait.hpp"
@@ -23,13 +26,105 @@
 
 namespace locomotion_mpc {
 
+namespace {
+constexpr uint8_t kHead0 = 0xFE;
+constexpr uint8_t kHead1 = 0xEF;
+constexpr uint8_t kLowLevel = 0xFF;
+constexpr double kPosStopF = 2.146E+9;
+constexpr double kVelStopF = 16000.0;
+
+struct MotorCmdRaw {
+  uint8_t mode;
+  float q;
+  float dq;
+  float tau;
+  float kp;
+  float kd;
+  std::array<uint32_t, 3> reserve;
+};
+
+struct BmsCmdRaw {
+  uint8_t off;
+  std::array<uint8_t, 3> reserve;
+};
+
+struct LowCmdRaw {
+  std::array<uint8_t, 2> head;
+  uint8_t level_flag;
+  uint8_t frame_reserve;
+  std::array<uint32_t, 2> sn;
+  std::array<uint32_t, 2> version;
+  uint16_t bandwidth;
+  std::array<MotorCmdRaw, 20> motor_cmd;
+  BmsCmdRaw bms;
+  std::array<uint8_t, 40> wireless_remote;
+  std::array<uint8_t, 12> led;
+  std::array<uint8_t, 2> fan;
+  uint8_t gpio;
+  uint32_t reserve;
+  uint32_t crc;
+};
+
+uint32_t crc32_core(uint32_t * ptr, uint32_t len) {
+  uint32_t xbit = 0;
+  uint32_t data = 0;
+  uint32_t crc32 = 0xFFFFFFFF;
+  const uint32_t poly = 0x04c11db7;
+  for (uint32_t i = 0; i < len; ++i) {
+    xbit = 1u << 31;
+    data = ptr[i];
+    for (uint32_t bits = 0; bits < 32; ++bits) {
+      if (crc32 & 0x80000000) {
+        crc32 = (crc32 << 1) ^ poly;
+      } else {
+        crc32 <<= 1;
+      }
+      if (data & xbit) crc32 ^= poly;
+      xbit >>= 1;
+    }
+  }
+  return crc32;
+}
+
+void get_crc(unitree_go::msg::LowCmd & msg) {
+  LowCmdRaw raw{};
+  std::memcpy(&raw.head[0], &msg.head[0], 2);
+  raw.level_flag = msg.level_flag;
+  raw.frame_reserve = msg.frame_reserve;
+  std::memcpy(&raw.sn[0], &msg.sn[0], 8);
+  std::memcpy(&raw.version[0], &msg.version[0], 8);
+  raw.bandwidth = msg.bandwidth;
+
+  for (int i = 0; i < 20; ++i) {
+    raw.motor_cmd[i].mode = msg.motor_cmd[i].mode;
+    raw.motor_cmd[i].q = msg.motor_cmd[i].q;
+    raw.motor_cmd[i].dq = msg.motor_cmd[i].dq;
+    raw.motor_cmd[i].tau = msg.motor_cmd[i].tau;
+    raw.motor_cmd[i].kp = msg.motor_cmd[i].kp;
+    raw.motor_cmd[i].kd = msg.motor_cmd[i].kd;
+    std::memcpy(&raw.motor_cmd[i].reserve[0], &msg.motor_cmd[i].reserve[0], 12);
+  }
+
+  raw.bms.off = msg.bms_cmd.off;
+  std::memcpy(&raw.bms.reserve[0], &msg.bms_cmd.reserve[0], 3);
+  std::memcpy(&raw.wireless_remote[0], &msg.wireless_remote[0], 40);
+  std::memcpy(&raw.led[0], &msg.led[0], 12);
+  std::memcpy(&raw.fan[0], &msg.fan[0], 2);
+  raw.gpio = msg.gpio;
+  raw.reserve = msg.reserve;
+
+  raw.crc = crc32_core(reinterpret_cast<uint32_t*>(&raw), (sizeof(LowCmdRaw) >> 2) - 1);
+  msg.crc = raw.crc;
+}
+}  // namespace
+
 class LocomotionNode : public rclcpp::Node {
 public:
   LocomotionNode()
   : rclcpp::Node("locomotion_controller")
   {
     const std::string go2_share = ament_index_cpp::get_package_share_directory("go2_description");
-    std::string default_urdf = go2_share + "/urdf/go2_description.urdf";
+    std::string default_urdf = go2_share + "/model/go2.urdf";
     std::string default_pkg_dir = go2_share;
 
     std::string urdf_path = declare_parameter<std::string>("urdf_path", default_urdf);
@@ -71,14 +166,31 @@ public:
       safety * hip_lim, safety * abd_lim, safety * knee_lim;
 
     auto qos = rclcpp::SensorDataQoS();
+    declare_parameter<std::string>("qdq_topic", "/qdq");
+    const auto qdq_topic = get_parameter("qdq_topic").as_string();
     sub_state_ = this->create_subscription<go2_msgs::msg::QDq>(
-      "/qdq", qos, std::bind(&LocomotionNode::onState, this, std::placeholders::_1));
+      qdq_topic, qos, std::bind(&LocomotionNode::onState, this, std::placeholders::_1));
     sub_mpc_ = this->create_subscription<go2_msgs::msg::MpcForces>(
       "/mpc_forces", qos, std::bind(&LocomotionNode::onMpc, this, std::placeholders::_1));
+    auto status_qos = rclcpp::QoS(rclcpp::KeepLast(1)).transient_local().reliable();
+    sub_mpc_status_ = this->create_subscription<std_msgs::msg::Bool>(
+      "/status/mpc/is_running", status_qos,
+      std::bind(&LocomotionNode::onMpcStatus, this, std::placeholders::_1));
+    sub_inekf_status_ = this->create_subscription<std_msgs::msg::Bool>(
+      "/status/inekf/is_running", status_qos,
+      std::bind(&LocomotionNode::onInekfStatus, this, std::placeholders::_1));
     sub_cmd_vel_ = this->create_subscription<geometry_msgs::msg::Twist>(
       "/cmd_vel", qos, std::bind(&LocomotionNode::onCmdVel, this, std::placeholders::_1));
 
     pub_lowcmd_ = this->create_publisher<unitree_go::msg::LowCmd>("/lowcmd", qos);
+    auto status_pub_qos = rclcpp::QoS(rclcpp::KeepLast(1)).transient_local().reliable();
+    pub_status_ = this->create_publisher<std_msgs::msg::Bool>(
+      "/status/loco_ctrl/is_running", status_pub_qos);
+    {
+      std_msgs::msg::Bool msg;
+      msg.data = false;
+      pub_status_->publish(msg);
+    }
 
     double ctrl_dt = 1.0 / std::max(1.0, ctrl_hz_);
     timer_ = this->create_wall_timer(
@@ -87,6 +199,13 @@ public:
       std::bind(&LocomotionNode::onControl, this));
 
     last_mpc_time_ = this->now();
+    status_timer_ = this->create_wall_timer(
+      std::chrono::seconds(1),
+      [this]() {
+        std_msgs::msg::Bool msg;
+        msg.data = ctrl_running_;
+        pub_status_->publish(msg);
+      });
 
     param_cb_handle_ = this->add_on_set_parameters_callback(
       [this](const std::vector<rclcpp::Parameter> & params)
@@ -196,10 +315,21 @@ private:
     yaw_rate_des_body_ = msg->angular.z;
   }
 
+  void onMpcStatus(const std_msgs::msg::Bool::SharedPtr msg)
+  {
+    mpc_running_ = msg->data;
+  }
+
+  void onInekfStatus(const std_msgs::msg::Bool::SharedPtr msg)
+  {
+    inekf_running_ = msg->data;
+  }
+
   void onControl()
   {
     if (!have_state_ || !sim_time_init_) {
       tau_hold_.setZero();
+      ctrl_running_ = false;
       return;
     }
 
@@ -211,7 +341,33 @@ private:
       forces = mpc_force_world_;
     }
     bool mpc_alive = have_mpc_ && (this->now() - last_mpc_time_).seconds() <= mpc_timeout_s_;
-    if (mpc_alive && gait_) {
+    bool mpc_ready = mpc_running_ && mpc_alive;
+    bool est_ready = inekf_running_;
+    if (!mpc_ready) {
+      if (!mpc_wait_logged_) {
+        RCLCPP_INFO(
+          get_logger(),
+          "Waiting for MPC: running=%s alive=%s",
+          mpc_running_ ? "true" : "false",
+          mpc_alive ? "true" : "false"
+        );
+        mpc_wait_logged_ = true;
+      }
+    } else {
+      mpc_wait_logged_ = false;
+    }
+    if (!est_ready) {
+      if (!est_wait_logged_) {
+        RCLCPP_INFO(
+          get_logger(),
+          "Waiting for state estimator (/status/inekf/is_running)"
+        );
+        est_wait_logged_ = true;
+      }
+    } else {
+      est_wait_logged_ = false;
+    }
+    if (mpc_ready && gait_) {
       const Eigen::Vector4i mask = gait_->computeCurrentMask(time_now_s);
       for (int i = 0; i < 4; ++i) {
         if (mask(i) == 1) {
@@ -256,22 +412,35 @@ private:
 
     bool forces_nonzero = forces.cwiseAbs().maxCoeff() > force_eps_;
 
-    if (mpc_alive || forces_nonzero) {
+    if ((mpc_ready && est_ready) || forces_nonzero) {
       publishLowCmd();
+      ctrl_running_ = true;
+    } else {
+      ctrl_running_ = false;
     }
   }
 
   void publishLowCmd()
   {
     unitree_go::msg::LowCmd msg;
+    msg.head[0] = kHead0;
+    msg.head[1] = kHead1;
+    msg.level_flag = kLowLevel;
+    msg.gpio = 0;
+
+    for (int i = 0; i < 20; ++i) {
+      msg.motor_cmd[i].mode = 0x01;
+      msg.motor_cmd[i].q = static_cast<float>(kPosStopF);
+      msg.motor_cmd[i].dq = static_cast<float>(kVelStopF);
+      msg.motor_cmd[i].kp = 0.0f;
+      msg.motor_cmd[i].kd = 0.0f;
+      msg.motor_cmd[i].tau = 0.0f;
+    }
     for (int i = 0; i < 12; ++i) {
       int src = mujoco_to_unitree_[i];
       msg.motor_cmd[i].tau = static_cast<float>(tau_hold_(src));
-      msg.motor_cmd[i].q = 0.0f;
-      msg.motor_cmd[i].dq = 0.0f;
-      msg.motor_cmd[i].kp = 0.0f;
-      msg.motor_cmd[i].kd = 0.0f;
     }
+    get_crc(msg);
     pub_lowcmd_->publish(msg);
   }
 
@@ -305,6 +474,11 @@ private:
 
   bool have_state_{false};
   bool have_mpc_{false};
+  bool mpc_running_{false};
+  bool inekf_running_{false};
+  bool ctrl_running_{false};
+  bool mpc_wait_logged_{false};
+  bool est_wait_logged_{false};
   rclcpp::Time last_state_time_{};
   rclcpp::Time last_mpc_time_{};
 
@@ -323,8 +497,12 @@ private:
 
   rclcpp::Subscription<go2_msgs::msg::QDq>::SharedPtr sub_state_;
   rclcpp::Subscription<go2_msgs::msg::MpcForces>::SharedPtr sub_mpc_;
+  rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr sub_mpc_status_;
+  rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr sub_inekf_status_;
   rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr sub_cmd_vel_;
   rclcpp::Publisher<unitree_go::msg::LowCmd>::SharedPtr pub_lowcmd_;
+  rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr pub_status_;
+  rclcpp::TimerBase::SharedPtr status_timer_;
   rclcpp::TimerBase::SharedPtr timer_;
   rclcpp::node_interfaces::OnSetParametersCallbackHandle::SharedPtr param_cb_handle_;
 };
