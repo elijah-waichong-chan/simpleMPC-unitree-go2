@@ -73,7 +73,8 @@ class ConfigurationState:
     
     def compute_euler_angle_world(self):
         # 1) raw roll, pitch, yaw in [-pi, pi]
-        q_eig = pin.Quaternion(self.base_quad)
+        qx, qy, qz, qw = self.base_quad
+        q_eig = pin.Quaternion(qw, qx, qy, qz)
         R = q_eig.toRotationMatrix()                        # returns 3x3 matrix from base -> world
         rpy = pin.rpy.matrixToRpy(R)                        # returns Euler ZYX
         roll, pitch, yaw_meas = np.array(rpy).reshape(3,)
