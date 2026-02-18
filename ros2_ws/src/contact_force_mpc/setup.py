@@ -38,6 +38,7 @@ setup(
         'console_scripts': [
             'contact_force_mpc = contact_force_mpc.locomotion_node:main',
             'mpc_node = contact_force_mpc.mpc_node:main',
+            'qdq_plotter = contact_force_mpc.qdq_plotter:main',
         ],
     },
 )
