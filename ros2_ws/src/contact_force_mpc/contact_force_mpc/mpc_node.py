@@ -1,8 +1,8 @@
-import rclpy
-from rclpy.node import Node
+import rclpy # type: ignore
+from rclpy.node import Node # type: ignore
 import time
 import numpy as np
-import pinocchio as pin
+import pinocchio as pin # type: ignore
 
 from contact_force_mpc.go2_robot_data import PinGo2Model
 from contact_force_mpc.com_trajectory import ComTraj
@@ -11,7 +11,7 @@ from contact_force_mpc.gait import Gait
 
 from go2_msgs.msg import QDq, MpcForces, LocomotionCmd
 from std_msgs.msg import Float64, Bool # type: ignore
-from rclpy.qos import QoSProfile, QoSHistoryPolicy, QoSDurabilityPolicy, QoSReliabilityPolicy
+from rclpy.qos import QoSProfile, QoSHistoryPolicy, QoSDurabilityPolicy, QoSReliabilityPolicy # type: ignore
 from rclpy.qos import qos_profile_sensor_data # type: ignore
 
 
@@ -100,6 +100,7 @@ class MPCNode(Node):
         self._is_running = False
         self.pub_status = self.create_publisher(Bool, "/status/mpc/is_running", status_qos)
         self.pub_status.publish(Bool(data=False))
+        self.status_timer = self.create_timer(1.0, self._publish_status)
 
         # Timer
         self.mpc_timer = self.create_timer(self.mpc_dt, self.mpc_step)
@@ -130,6 +131,9 @@ class MPCNode(Node):
     def _on_inekf_status(self, msg: Bool):
         self._inekf_running = bool(msg.data)
 
+    def _publish_status(self):
+        self.pub_status.publish(Bool(data=self._is_running))
+
     def store_state(self, msg: QDq):
         self.sim_time_now = msg.sim_time
 
@@ -156,11 +160,13 @@ class MPCNode(Node):
     def mpc_step(self):
         t0 = time.perf_counter()
         if not self._have_state or not self._inekf_running:
+            self._is_running = False
             return
 
         now = self.get_clock().now()
         if self.last_update_time is None or (now - self.last_update_time).nanoseconds * 1e-9 > 1.0:
             self._have_state = False
+            self._is_running = False
             return
 
         time_now_s = float(self.sim_time_now + self.time_offset)
@@ -193,9 +199,7 @@ class MPCNode(Node):
         msg.forces = force.tolist()
         msg.dt = float(self.mpc_dt)
         self.pub_mpc.publish(msg)
-        if not self._is_running:
-            self._is_running = True
-            self.pub_status.publish(Bool(data=True))
+        self._is_running = True
 
         t1 = time.perf_counter()
         self._pub_ms(self.mpc_loop_ms, (t1 - t0) * 1000.0)
