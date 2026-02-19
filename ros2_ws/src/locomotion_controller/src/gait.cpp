@@ -17,6 +17,18 @@ Gait::Gait(double frequency_hz, double duty,
     ground_offset_(ground_offset),
     swing_height_(swing_height)
 {
+  setGaitHz(gait_hz_);
+}
+
+void Gait::setGaitHz(double frequency_hz)
+{
+  gait_hz_ = std::max(0.0, frequency_hz);
+  if (gait_hz_ <= 0.0) {
+    gait_period_ = 1.0;
+    stance_time_ = 0.0;
+    swing_time_ = 0.0;
+    return;
+  }
   gait_period_ = 1.0 / gait_hz_;
   stance_time_ = gait_duty_ * gait_period_;
   swing_time_ = (1.0 - gait_duty_) * gait_period_;
@@ -26,6 +38,10 @@ Eigen::Matrix<int, 4, Eigen::Dynamic>
 Gait::computeContactTable(double t0, double dt, int N) const
 {
   Eigen::Matrix<int, 4, Eigen::Dynamic> contact(4, N);
+  if (gait_hz_ <= 0.0) {
+    contact.setOnes();
+    return contact;
+  }
   for (int k = 0; k < N; ++k) {
     double t = t0 + static_cast<double>(k) * dt + dt * 0.5;
     for (int i = 0; i < 4; ++i) {
