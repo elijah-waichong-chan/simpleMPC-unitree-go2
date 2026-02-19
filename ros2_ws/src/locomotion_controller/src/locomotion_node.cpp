@@ -14,9 +14,9 @@
 #include <rclcpp/rclcpp.hpp>
 #include <rcl_interfaces/msg/set_parameters_result.hpp>
 
-#include "geometry_msgs/msg/twist.hpp"
 #include "go2_msgs/msg/mpc_forces.hpp"
 #include "go2_msgs/msg/q_dq.hpp"
+#include "go2_msgs/msg/locomotion_cmd.hpp"
 #include "std_msgs/msg/bool.hpp"
 #include "unitree_go/msg/low_cmd.hpp"
 
@@ -133,10 +133,15 @@ public:
     gait_hz_ = declare_parameter<double>("gait_hz", 3.0);
     gait_duty_ = declare_parameter<double>("gait_duty", 0.6);
     ctrl_hz_ = declare_parameter<double>("ctrl_hz", 250.0);
+    time_offset_ = declare_parameter<double>("gait_time_offset", 0.0);
+    gait_hz_min_ = declare_parameter<double>("gait_hz_min", 0.0);
+    gait_hz_max_ = declare_parameter<double>("gait_hz_max", 4.0);
 
     x_vel_des_body_ = declare_parameter<double>("x_vel_des_body", 0.0);
     y_vel_des_body_ = declare_parameter<double>("y_vel_des_body", 0.0);
     z_pos_des_body_ = declare_parameter<double>("z_pos_des_body", 0.27);
+    z_pos_min_ = declare_parameter<double>("z_pos_min", z_pos_min_);
+    z_pos_max_ = declare_parameter<double>("z_pos_max", z_pos_max_);
     yaw_rate_des_body_ = declare_parameter<double>("yaw_rate_des_body", 0.0);
     ground_offset_ = declare_parameter<double>("ground_offset", ground_offset_);
     swing_height_ = declare_parameter<double>("swing_height", swing_height_);
@@ -168,6 +173,10 @@ public:
     auto qos = rclcpp::SensorDataQoS();
     declare_parameter<std::string>("qdq_topic", "/qdq");
     const auto qdq_topic = get_parameter("qdq_topic").as_string();
+    const auto loco_cmd_topic =
+      declare_parameter<std::string>("locomotion_cmd_topic", "/locomotion_cmd");
+    const auto loco_cmd_state_topic =
+      declare_parameter<std::string>("locomotion_cmd_state_topic", "/locomotion_cmd_state");
     sub_state_ = this->create_subscription<go2_msgs::msg::QDq>(
       qdq_topic, qos, std::bind(&LocomotionNode::onState, this, std::placeholders::_1));
     sub_mpc_ = this->create_subscription<go2_msgs::msg::MpcForces>(
@@ -179,10 +188,12 @@ public:
     sub_inekf_status_ = this->create_subscription<std_msgs::msg::Bool>(
       "/status/inekf/is_running", status_qos,
       std::bind(&LocomotionNode::onInekfStatus, this, std::placeholders::_1));
-    sub_cmd_vel_ = this->create_subscription<geometry_msgs::msg::Twist>(
-      "/cmd_vel", qos, std::bind(&LocomotionNode::onCmdVel, this, std::placeholders::_1));
+    sub_loco_cmd_ = this->create_subscription<go2_msgs::msg::LocomotionCmd>(
+      loco_cmd_topic, qos, std::bind(&LocomotionNode::onLocomotionCmd, this, std::placeholders::_1));
 
     pub_lowcmd_ = this->create_publisher<unitree_go::msg::LowCmd>("/lowcmd", qos);
+    pub_cmd_state_ = this->create_publisher<go2_msgs::msg::LocomotionCmd>(
+      loco_cmd_state_topic, qos);
     auto status_pub_qos = rclcpp::QoS(rclcpp::KeepLast(1)).transient_local().reliable();
     pub_status_ = this->create_publisher<std_msgs::msg::Bool>(
       "/status/loco_ctrl/is_running", status_pub_qos);
@@ -220,8 +231,18 @@ public:
             x_vel_des_body_ = param.as_double();
           } else if (name == "y_vel_des_body") {
             y_vel_des_body_ = param.as_double();
+          } else if (name == "gait_hz") {
+            gait_hz_ = param.as_double();
+          } else if (name == "gait_hz_min") {
+            gait_hz_min_ = param.as_double();
+          } else if (name == "gait_hz_max") {
+            gait_hz_max_ = param.as_double();
           } else if (name == "z_pos_des_body") {
             z_pos_des_body_ = param.as_double();
+          } else if (name == "z_pos_min") {
+            z_pos_min_ = param.as_double();
+          } else if (name == "z_pos_max") {
+            z_pos_max_ = param.as_double();
           } else if (name == "yaw_rate_des_body") {
             yaw_rate_des_body_ = param.as_double();
           } else if (name == "ground_offset") {
@@ -236,6 +257,8 @@ public:
         }
         leg_controller_.setSwingGains(swing_kp_, swing_kd_);
         if (gait_) {
+          gait_hz_ = std::min(std::max(gait_hz_, gait_hz_min_), gait_hz_max_);
+          gait_->setGaitHz(gait_hz_);
           gait_->setGroundOffset(ground_offset_);
           gait_->setSwingHeight(swing_height_);
         }
@@ -250,7 +273,6 @@ private:
   void onState(const go2_msgs::msg::QDq::SharedPtr msg)
   {
     if (!sim_time_init_) {
-      sim_time_t0_ = msg->sim_time;
       sim_time_init_ = true;
     }
     sim_time_now_ = msg->sim_time;
@@ -309,10 +331,16 @@ private:
     last_mpc_time_ = this->now();
   }
 
-  void onCmdVel(const geometry_msgs::msg::Twist::SharedPtr msg)
+  void onLocomotionCmd(const go2_msgs::msg::LocomotionCmd::SharedPtr msg)
   {
-    x_vel_des_body_ = msg->linear.x;
-    yaw_rate_des_body_ = msg->angular.z;
+    x_vel_des_body_ = msg->x_vel;
+    y_vel_des_body_ = msg->y_vel;
+    yaw_rate_des_body_ = msg->yaw_rate;
+    z_pos_des_body_ = std::min(std::max(msg->z_pos, z_pos_min_), z_pos_max_);
+    gait_hz_ = std::min(std::max(msg->gait_hz, gait_hz_min_), gait_hz_max_);
+    if (gait_) {
+      gait_->setGaitHz(gait_hz_);
+    }
   }
 
   void onMpcStatus(const std_msgs::msg::Bool::SharedPtr msg)
@@ -327,13 +355,14 @@ private:
 
   void onControl()
   {
+    const auto now = this->now();
     if (!have_state_ || !sim_time_init_) {
       tau_hold_.setZero();
       ctrl_running_ = false;
       return;
     }
 
-    const double time_now_s = sim_time_now_ - sim_time_t0_;
+    const double time_now_s = sim_time_now_ + time_offset_;
 
     Eigen::VectorXd forces;
     {
@@ -418,6 +447,8 @@ private:
     } else {
       ctrl_running_ = false;
     }
+
+    publishCmdState(now);
   }
 
   void publishLowCmd()
@@ -444,13 +475,32 @@ private:
     pub_lowcmd_->publish(msg);
   }
 
+  void publishCmdState(const rclcpp::Time & stamp)
+  {
+    if (!pub_cmd_state_) {
+      return;
+    }
+    go2_msgs::msg::LocomotionCmd msg;
+    msg.stamp = stamp;
+    msg.x_vel = x_vel_des_body_;
+    msg.y_vel = y_vel_des_body_;
+    msg.z_pos = z_pos_des_body_;
+    msg.yaw_rate = yaw_rate_des_body_;
+    msg.gait_hz = gait_hz_;
+    pub_cmd_state_->publish(msg);
+  }
+
   double gait_hz_{3.0};
   double gait_duty_{0.6};
   double ctrl_hz_{250.0};
+  double gait_hz_min_{0.0};
+  double gait_hz_max_{4.0};
 
   double x_vel_des_body_{0.0};
   double y_vel_des_body_{0.0};
   double z_pos_des_body_{0.27};
+  double z_pos_min_{0.15};
+  double z_pos_max_{0.45};
   double yaw_rate_des_body_{0.0};
   double swing_kp_{400.0};
   double swing_kd_{75.0};
@@ -483,8 +533,8 @@ private:
   rclcpp::Time last_mpc_time_{};
 
   double sim_time_now_{0.0};
-  double sim_time_t0_{0.0};
   bool sim_time_init_{false};
+  double time_offset_{0.0};
 
   Eigen::Vector3d pos_des_world_{Eigen::Vector3d::Zero()};
   bool pos_des_init_{false};
@@ -499,8 +549,9 @@ private:
   rclcpp::Subscription<go2_msgs::msg::MpcForces>::SharedPtr sub_mpc_;
   rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr sub_mpc_status_;
   rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr sub_inekf_status_;
-  rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr sub_cmd_vel_;
+  rclcpp::Subscription<go2_msgs::msg::LocomotionCmd>::SharedPtr sub_loco_cmd_;
   rclcpp::Publisher<unitree_go::msg::LowCmd>::SharedPtr pub_lowcmd_;
+  rclcpp::Publisher<go2_msgs::msg::LocomotionCmd>::SharedPtr pub_cmd_state_;
   rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr pub_status_;
   rclcpp::TimerBase::SharedPtr status_timer_;
   rclcpp::TimerBase::SharedPtr timer_;
