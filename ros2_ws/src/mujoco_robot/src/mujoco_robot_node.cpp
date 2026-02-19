@@ -4,6 +4,7 @@
 #include <unitree_go/msg/low_cmd.hpp>
 #include <go2_msgs/msg/q_dq.hpp>
 #include <std_msgs/msg/float64.hpp>
+#include <std_msgs/msg/bool.hpp>
 
 #include <mujoco/mujoco.h>
 #include <GLFW/glfw3.h>
@@ -166,6 +167,25 @@ public:
     // ROS pub/sub
     pub_lowstate_ = create_publisher<unitree_go::msg::LowState>("/lowstate", 10);
     pub_qdq_      = create_publisher<go2_msgs::msg::QDq>("/qdq", rclcpp::SensorDataQoS());
+    // Volatile QoS avoids stale latched "true" when the node shuts down.
+    auto status_qos = rclcpp::QoS(rclcpp::KeepLast(1)).reliable();
+    pub_status_ = create_publisher<std_msgs::msg::Bool>("/status/mujoco/is_running", status_qos);
+    status_timer_ = create_wall_timer(
+      100ms,
+      [this]() {
+        std_msgs::msg::Bool msg;
+        msg.data = true;
+        pub_status_->publish(msg);
+      }
+    );
+
+    rclcpp::on_shutdown([weak_pub = std::weak_ptr<rclcpp::Publisher<std_msgs::msg::Bool>>(pub_status_)]() {
+      if (auto pub = weak_pub.lock()) {
+        std_msgs::msg::Bool msg;
+        msg.data = false;
+        pub->publish(msg);
+      }
+    });
 
     if (debug_publish_) {
       auto tqos = rclcpp::SensorDataQoS();
@@ -647,6 +667,8 @@ private:
   // Last applied joint torques in Unitree motor_state order.
   std::array<double, 12> last_tau_{};
   rclcpp::Publisher<go2_msgs::msg::QDq>::SharedPtr pub_qdq_;
+  rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr pub_status_;
+  rclcpp::TimerBase::SharedPtr status_timer_;
   rclcpp::Subscription<unitree_go::msg::LowCmd>::SharedPtr sub_cmd_;
 
   // Telemetry pubs
