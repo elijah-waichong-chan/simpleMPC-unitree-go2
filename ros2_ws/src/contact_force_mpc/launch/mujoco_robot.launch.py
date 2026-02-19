@@ -28,16 +28,5 @@ def generate_launch_description():
                 'imu_acc_noise_std': 0.1,
                 'imu_noise_seed': 1,
             }],
-        ),
-        Node(
-            package='contact_force_mpc',
-            executable='qdq_plotter',
-            name='qdq_plotter',
-            output='screen',
-            parameters=[{
-                'qdq_topic': '/qdq',
-                'history_sec': 0.0,
-                'refresh_hz': 10.0,
-            }],
-        ),
+        )
     ])
