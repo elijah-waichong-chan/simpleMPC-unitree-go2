@@ -12,11 +12,22 @@ HEIGHT_SWING = 0.1 # Height of the swing leg trajectory apex
 class Gait():
     def __init__(self, frequency_hz, duty):
         self.gait_duty = duty
-        self.gait_hz = frequency_hz
+        self.gait_hz = 0.0
+        self.gait_period = 1.0
+        self.stance_time = 0.0
+        self.swing_time = 0.0
+        self.set_gait_hz(frequency_hz)
 
-        self.gait_period = 1 / frequency_hz # Perioid
+    def set_gait_hz(self, frequency_hz: float):
+        self.gait_hz = max(0.0, float(frequency_hz))
+        if self.gait_hz <= 0.0:
+            self.gait_period = 1.0
+            self.stance_time = 0.0
+            self.swing_time = 0.0
+            return
+        self.gait_period = 1.0 / self.gait_hz
         self.stance_time = self.gait_duty * self.gait_period
-        self.swing_time = (1-self.gait_duty) * self.gait_period
+        self.swing_time = (1 - self.gait_duty) * self.gait_period
 
     def compute_current_mask(self, time):
 
@@ -28,6 +39,9 @@ class Gait():
         # times: (N,)
         t = t0 + np.arange(N) * dt
         t = t + dt/2
+
+        if self.gait_hz <= 0.0:
+            return np.ones((4, N), dtype=np.int32)
 
         # phases: (4,N)
         phases = np.mod(PHASE_OFFSET[:, None] + t[None, :] / self.gait_period, 1.0)
@@ -173,5 +187,4 @@ class Gait():
 
         return eval_at
     
-
 
