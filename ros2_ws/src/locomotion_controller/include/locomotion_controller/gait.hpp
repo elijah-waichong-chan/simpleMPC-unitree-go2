@@ -17,6 +17,7 @@ public:
 
   void setGroundOffset(double ground_offset) { ground_offset_ = ground_offset; }
   void setSwingHeight(double swing_height) { swing_height_ = swing_height; }
+  void setGaitHz(double frequency_hz);
   double groundOffset() const { return ground_offset_; }
   double swingHeight() const { return swing_height_; }
 
