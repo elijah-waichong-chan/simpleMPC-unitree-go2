@@ -9,11 +9,10 @@ from contact_force_mpc.com_trajectory import ComTraj
 from contact_force_mpc.centroidal_mpc import CentroidalMPC
 from contact_force_mpc.gait import Gait
 
-from go2_msgs.msg import QDq, MpcForces
+from go2_msgs.msg import QDq, MpcForces, LocomotionCmd
 from std_msgs.msg import Float64, Bool # type: ignore
 from rclpy.qos import QoSProfile, QoSHistoryPolicy, QoSDurabilityPolicy, QoSReliabilityPolicy
 from rclpy.qos import qos_profile_sensor_data # type: ignore
-from geometry_msgs.msg import Twist
 
 
 from threading import Lock
@@ -25,8 +24,10 @@ class MPCNode(Node):
 
         # Parameters
         self.gait_hz = 3.0
-        self.gait_duty = 0.6
+        self.gait_duty = 1.0
         self.gait_t = 1.0 / self.gait_hz
+        self.gait_hz_min = float(self.declare_parameter("gait_hz_min", 2.0).value)
+        self.gait_hz_max = float(self.declare_parameter("gait_hz_max", 4.0).value)
 
         self.mpc_dt = self.gait_t / 16
         self.mpc_hz = 1.0 / self.mpc_dt
@@ -34,11 +35,12 @@ class MPCNode(Node):
         # Trajectory Reference Setting (defaults)
         self.x_vel_des_body = 0.0
         self.y_vel_des_body = 0.0
-        self.z_pos_des_body = 0.27
+        self.z_pos_des_body = 0.3
         self.yaw_rate_des_body = 0.0
+        self.z_pos_min = float(self.declare_parameter("z_pos_min", 0.20).value)
+        self.z_pos_max = float(self.declare_parameter("z_pos_max", 0.40).value)
 
         # State
-        self.sim_time_t0 = None
         self.sim_time_now = 0.0
         self._have_state = False
         self.last_update_time = None
@@ -71,13 +73,19 @@ class MPCNode(Node):
             cost_q = default_q
         self.cost_q_diag = cost_q
         self.debug_publish = bool(self.declare_parameter("debug_publish", True).value)
+        self.time_offset = float(self.declare_parameter("gait_time_offset", 0.0).value)
         self.mpc = CentroidalMPC(self.go2, self.traj, q_diag=self.cost_q_diag)
         qdq_topic = str(self.declare_parameter("qdq_topic", "/qdq").value)
+        locomotion_cmd_topic = str(
+            self.declare_parameter("locomotion_cmd_topic", "/locomotion_cmd").value
+        )
 
         # ROS pub/sub
         self.pub_mpc = self.create_publisher(MpcForces, "/mpc_forces", qos_profile_sensor_data)
         self.sub_robotstate = self.create_subscription(QDq, qdq_topic, self.store_state, qos_profile_sensor_data)
-        self.sub_cmd_vel = self.create_subscription(Twist, "/cmd_vel", self.store_cmd_vel, qos_profile_sensor_data)
+        self.sub_loco_cmd = self.create_subscription(
+            LocomotionCmd, locomotion_cmd_topic, self.store_locomotion_cmd, qos_profile_sensor_data
+        )
         status_qos = QoSProfile(
             history=QoSHistoryPolicy.KEEP_LAST,
             depth=1,
@@ -101,9 +109,16 @@ class MPCNode(Node):
 
         self.get_logger().info("MPC node is running...")
 
-    def store_cmd_vel(self, msg: Twist):
-        self.x_vel_des_body = float(msg.linear.x)
-        self.yaw_rate_des_body = float(msg.angular.z)
+    def store_locomotion_cmd(self, msg: LocomotionCmd):
+        self.x_vel_des_body = float(msg.x_vel)
+        self.y_vel_des_body = float(msg.y_vel)
+        self.yaw_rate_des_body = float(msg.yaw_rate)
+        self.z_pos_des_body = float(np.clip(msg.z_pos, self.z_pos_min, self.z_pos_max))
+        next_hz = float(np.clip(msg.gait_hz, self.gait_hz_min, self.gait_hz_max))
+        if next_hz != self.gait_hz:
+            self.gait_hz = next_hz
+            self.gait_t = 1.0 / self.gait_hz if self.gait_hz > 0.0 else 1.0
+            self.gait.set_gait_hz(self.gait_hz)
 
     def _pub_ms(self, pub, ms: float):
         if not self.debug_publish:
@@ -116,8 +131,6 @@ class MPCNode(Node):
         self._inekf_running = bool(msg.data)
 
     def store_state(self, msg: QDq):
-        if self.sim_time_t0 is None:
-            self.sim_time_t0 = msg.sim_time
         self.sim_time_now = msg.sim_time
 
         self.q = np.array(msg.q, dtype=float)
@@ -150,7 +163,7 @@ class MPCNode(Node):
             self._have_state = False
             return
 
-        time_now_s = float(self.sim_time_now - self.sim_time_t0)
+        time_now_s = float(self.sim_time_now + self.time_offset)
 
         with self._go2_lock:
             self.traj.generate_traj(
