@@ -1,9 +1,9 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import Node
-from ament_index_python.packages import get_package_share_directory
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable # type: ignore
+from launch.launch_description_sources import PythonLaunchDescriptionSource # type: ignore
+from launch.substitutions import LaunchConfiguration # type: ignore
+from launch_ros.actions import Node # type: ignore
+from ament_index_python.packages import get_package_share_directory # type: ignore
 
 
 def generate_launch_description():
@@ -49,7 +49,7 @@ def generate_launch_description():
             name='mpc_node',
             output='screen',
             parameters=[{
-                'cost_q': [1.0, 1.0, 100.0,  10.0, 20.0, 1.0,   2.0, 2.0, 1.0,   1.0, 1.0, 1.0],
+                'cost_q': [1.0, 1.0, 50.0,  10.0, 50.0, 1.0,   2.0, 2.0, 1.0,   1.0, 1.0, 1.0],
                 'debug_publish': False,
                 'qdq_topic': state_topic,
             }],
@@ -69,6 +69,7 @@ def generate_launch_description():
                 'swing_height': 0.05,
                 'stance_force_min': 0.0,
                 'stance_fallback_force_z': 0.0,
+                'joint_vel_limit': 30.0,
                 'qdq_topic': state_topic,
             }],
         ),
@@ -93,8 +94,8 @@ def generate_launch_description():
                 'scale_z_rate': 0.05,
                 'scale_x_turbo': 1.0,
                 'scale_z_rate_turbo': 0.1,
-                'scale_y': 0.2,
-                'scale_y_turbo': 0.4,
+                'scale_y': 0.3,
+                'scale_y_turbo': 0.6,
                 'scale_yaw': 2.0,
                 'scale_yaw_turbo': 4.0,
             }],
