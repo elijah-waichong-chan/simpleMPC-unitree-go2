@@ -17,13 +17,19 @@ class Gait():
         self.gait_period = 1 / frequency_hz # Perioid
         self.stance_time = self.gait_duty * self.gait_period
         self.swing_time = (1-self.gait_duty) * self.gait_period
+        self.standing = False  # when True, all legs stay in stance
 
     def compute_current_mask(self, time):
 
+        if self.standing:
+            return np.ones((4, 1), dtype=np.int32)
         mask = self.compute_contact_table(time, 0, 1)
         return mask
-    
+
     def compute_contact_table(self, t0: float, dt: float, N: int) -> np.ndarray:
+
+        if self.standing:
+            return np.ones((4, N), dtype=np.int32)
 
         # times: (N,)
         t = t0 + np.arange(N) * dt
