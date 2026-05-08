@@ -1,8 +1,10 @@
-from pinocchio.robot_wrapper import RobotWrapper
 from pathlib import Path
-import pinocchio as pin 
+
 import numpy as np
+import pinocchio as pin
 from numpy import cos, sin
+from pinocchio.robot_wrapper import RobotWrapper
+
 
 # --------------------------------------------------------------------------------
 # Model Setting
@@ -12,6 +14,7 @@ REPO = Path(__file__).resolve().parents[2]
 PACKAGE_DIRS = REPO / "models" / "URDF"
 URDF_PATH = PACKAGE_DIRS / "go2_description" / "urdf" / "go2_description.urdf"
 
+
 class ConfigurationState:
 
     def __init__(self):
@@ -20,7 +23,7 @@ class ConfigurationState:
         self.base_pos = np.array([0.0, 0.0, 0.27])
         self.base_quad = np.array([0.0, 0.0, 0.0, 1.0])
         self.FL_joint_angle = np.array([0.0, 0.9, -1.8])
-        self.FR_joint_angle =  np.array([0.0, 0.9, -1.8])
+        self.FR_joint_angle = np.array([0.0, 0.9, -1.8])
         self.RL_joint_angle = np.array([0.0, 0.9, -1.8])
         self.RR_joint_angle = np.array([0.0, 0.9, -1.8])
 
@@ -33,22 +36,36 @@ class ConfigurationState:
         self.RR_joint_vel = np.array([0.0, 0.0, 0.0])
 
     def get_q(self):
-        #Generalized position: (19x1)
-        q = np.concatenate([self.base_pos, self.base_quad, 
-                            self.FL_joint_angle, self.FR_joint_angle,
-                            self.RL_joint_angle, self.RR_joint_angle])
+        # Generalized position: (19x1)
+        q = np.concatenate(
+            [
+                self.base_pos,
+                self.base_quad,
+                self.FL_joint_angle,
+                self.FR_joint_angle,
+                self.RL_joint_angle,
+                self.RR_joint_angle,
+            ]
+        )
         return q
-    
+
     def get_dq(self):
-        #Generalized velocity: (18x1)
-        dq = np.concatenate([self.base_vel, self.base_ang_vel, 
-                            self.FL_joint_vel, self.FR_joint_vel,
-                            self.RL_joint_vel, self.RR_joint_vel])
+        # Generalized velocity: (18x1)
+        dq = np.concatenate(
+            [
+                self.base_vel,
+                self.base_ang_vel,
+                self.FL_joint_vel,
+                self.FR_joint_vel,
+                self.RL_joint_vel,
+                self.RR_joint_vel,
+            ]
+        )
         return dq
-    
+
     def update_q(self, q):
         # base pose
-        self.base_pos  = q[0:3]  # [x, y, z]
+        self.base_pos = q[0:3]  # [x, y, z]
         self.base_quad = q[3:7]  # quaternion [x, y, z, w]
 
         # joint angles: FL, FR, RL, RR each [hip, thigh, calf]
@@ -61,8 +78,8 @@ class ConfigurationState:
     def update_dq(self, v):
 
         # base twist
-        self.base_vel     = v[0:3]      # [vx, vy, vz]
-        self.base_ang_vel = v[3:6]      # [wx, wy, wz]
+        self.base_vel = v[0:3]  # [vx, vy, vz]
+        self.base_ang_vel = v[3:6]  # [wx, wy, wz]
 
         # joint velocities: FL, FR, RL, RR each [hip, thigh, calf]
         jv = v[6:18]
@@ -70,14 +87,16 @@ class ConfigurationState:
         self.FR_joint_vel = jv[3:6]
         self.RL_joint_vel = jv[6:9]
         self.RR_joint_vel = jv[9:12]
-    
+
     def compute_euler_angle_world(self):
         # 1) raw roll, pitch, yaw in [-pi, pi]
         qx, qy, qz, qw = self.base_quad
         q_eig = pin.Quaternion(qw, qx, qy, qz)
-        R = q_eig.toRotationMatrix()                        # returns 3x3 matrix from base -> world
-        rpy = pin.rpy.matrixToRpy(R)                        # returns Euler ZYX
-        roll, pitch, yaw_meas = np.array(rpy).reshape(3,)
+        R = q_eig.toRotationMatrix()  # returns 3x3 matrix from base -> world
+        rpy = pin.rpy.matrixToRpy(R)  # returns Euler ZYX
+        roll, pitch, yaw_meas = np.array(rpy).reshape(
+            3,
+        )
 
         # 2) initialize unwrap state on first call
         if not hasattr(self, "_yaw_unwrap_initialized"):
@@ -92,19 +111,20 @@ class ConfigurationState:
 
         # 4) return roll, pitch, continuous yaw
         return np.array([roll, pitch, self._yaw_cont])
-    
+
     def update_with_euler_angle(self, roll, pitch, yaw):
 
-        cr,sr = np.cos(roll/2), np.sin(roll/2)
-        cp,sp = np.cos(pitch/2), np.sin(pitch/2)
-        cy,sy = np.cos(yaw/2), np.sin(yaw/2)
-        
-        qx = sr*cp*cy - cr*sp*sy
-        qy = cr*sp*cy + sr*cp*sy
-        qz = cr*cp*sy - sr*sp*cy
-        qw = cr*cp*cy + sr*sp*sy
+        cr, sr = np.cos(roll / 2), np.sin(roll / 2)
+        cp, sp = np.cos(pitch / 2), np.sin(pitch / 2)
+        cy, sy = np.cos(yaw / 2), np.sin(yaw / 2)
+
+        qx = sr * cp * cy - cr * sp * sy
+        qy = cr * sp * cy + sr * cp * sy
+        qz = cr * cp * sy - sr * sp * cy
+        qw = cr * cp * cy + sr * sp * sy
 
         self.base_quad = np.array([qx, qy, qz, qw])
+
 
 class PinGo2Model:
 
@@ -114,7 +134,7 @@ class PinGo2Model:
         robot = RobotWrapper.BuildFromURDF(
             str(URDF_PATH),
             package_dirs=[str(PACKAGE_DIRS)],
-            root_joint=pin.JointModelFreeFlyer()
+            root_joint=pin.JointModelFreeFlyer(),
         )
 
         # Core models
@@ -172,7 +192,7 @@ class PinGo2Model:
     def get_hip_offset(self, leg: str):
         name = f"{leg.upper()}_hip_offset"
         return getattr(self, name)
-    
+
     def compute_com_x_vec(self):
 
         # This function return the 6-DOF 12 states centroidal x-vector
@@ -180,13 +200,12 @@ class PinGo2Model:
         rpy_com_world = self.current_config.compute_euler_angle_world()
         vel_com_world = self.vel_com_world
         rpy_rate_body = self.current_config.base_ang_vel
-        
+
         R = self.R_body_to_world
         omega_world = R @ rpy_rate_body
 
-        x_vec = np.concatenate([pos_com_world, rpy_com_world, 
-                                vel_com_world, omega_world])
-        
+        x_vec = np.concatenate([pos_com_world, rpy_com_world, vel_com_world, omega_world])
+
         x_vec = x_vec.reshape(-1, 1)
 
         return x_vec
@@ -195,7 +214,7 @@ class PinGo2Model:
         self.current_config.update_q(q)
         self.current_config.update_dq(dq)
         pin.forwardKinematics(self.model, self.data, q, dq)
-        pin.updateFramePlacements(self.model, self.data) 
+        pin.updateFramePlacements(self.model, self.data)
         pin.computeAllTerms(self.model, self.data, q, dq)
         pin.computeJointJacobians(self.model, self.data, q)
         pin.computeJointJacobiansTimeVariation(self.model, self.data, q, dq)
@@ -216,11 +235,7 @@ class PinGo2Model:
         self.R_body_to_world = R_bw
         self.R_world_to_body = R_bw.T
 
-        self.R_z = np.array([
-            [cos(yaw), -sin(yaw), 0],
-            [sin(yaw),  cos(yaw), 0],
-            [0,             0,            1]
-        ])
+        self.R_z = np.array([[cos(yaw), -sin(yaw), 0], [sin(yaw), cos(yaw), 0], [0, 0, 1]])
 
     def update_model_simplified(self, q, dq):
 
@@ -228,25 +243,24 @@ class PinGo2Model:
         pitch = q[4]
         yaw = q[5]
 
-        cr,sr = np.cos(roll/2), np.sin(roll/2)
-        cp,sp = np.cos(pitch/2), np.sin(pitch/2)
-        cy,sy = np.cos(yaw/2), np.sin(yaw/2)
-        
-        qx = sr*cp*cy - cr*sp*sy
-        qy = cr*sp*cy + sr*cp*sy
-        qz = cr*cp*sy - sr*sp*cy
-        qw = cr*cp*cy + sr*sp*sy
+        cr, sr = np.cos(roll / 2), np.sin(roll / 2)
+        cp, sp = np.cos(pitch / 2), np.sin(pitch / 2)
+        cy, sy = np.cos(yaw / 2), np.sin(yaw / 2)
 
-        q_full = np.concatenate([
-            q[0:3],                # base position
-            [qx, qy, qz, qw],      # base quaternion
-            np.zeros(12)           # 12 leg joint angles
-        ])
+        qx = sr * cp * cy - cr * sp * sy
+        qy = cr * sp * cy + sr * cp * sy
+        qz = cr * cp * sy - sr * sp * cy
+        qw = cr * cp * cy + sr * sp * sy
 
-        dq_full = np.concatenate([
-            dq[0:6],              
-            np.zeros(12)
-        ])
+        q_full = np.concatenate(
+            [
+                q[0:3],  # base position
+                [qx, qy, qz, qw],  # base quaternion
+                np.zeros(12),  # 12 leg joint angles
+            ]
+        )
+
+        dq_full = np.concatenate([dq[0:6], np.zeros(12)])
 
         self.update_model(q_full, dq_full)
 
@@ -258,17 +272,17 @@ class PinGo2Model:
         RR_placement = self.oMf4.translation.copy()
 
         return FL_placement, FR_placement, RL_placement, RR_placement
-    
+
     def get_foot_lever_world(self):
 
-        pos_com_world = self.pos_com_world    
+        pos_com_world = self.pos_com_world
         FL_placement = self.oMf1.translation - pos_com_world
         FR_placement = self.oMf2.translation - pos_com_world
         RL_placement = self.oMf3.translation - pos_com_world
         RR_placement = self.oMf4.translation - pos_com_world
 
         return FL_placement, FR_placement, RL_placement, RR_placement
-    
+
     def get_single_foot_state_in_world(self, leg: str):
 
         foot_id = getattr(self, f"{leg}_foot_id")
@@ -278,45 +292,48 @@ class PinGo2Model:
         foot_pos_world = oMf.translation.copy()  # (3,)
 
         # 6D spatial velocity in LOCAL_WORLD_ALIGNED (axes = world)
-        v6 = pin.getFrameVelocity(self.model, self.data, foot_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED)
+        v6 = pin.getFrameVelocity(
+            self.model, self.data, foot_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED
+        )
         foot_vel_world = np.array(v6.linear).copy()  # (3,)
 
         return foot_pos_world, foot_vel_world
-    
-    
+
     def compute_3x3_foot_Jacobian_world(self, leg: str):
 
         foot_id = getattr(self, f"{leg}_foot_id")  # e.g. "FL_foot_id"
-        J_world = pin.getFrameJacobian(self.model, self.data, foot_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED)
-        J_pos_world = J_world[0:3,:]
+        J_world = pin.getFrameJacobian(
+            self.model, self.data, foot_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED
+        )
+        J_pos_world = J_world[0:3, :]
 
-        joint_ids  = [self.model.getJointId(f"{leg}_hip_joint"), 
-                      self.model.getJointId(f"{leg}_thigh_joint"), 
-                      self.model.getJointId(f"{leg}_calf_joint")]
+        joint_ids = [
+            self.model.getJointId(f"{leg}_hip_joint"),
+            self.model.getJointId(f"{leg}_thigh_joint"),
+            self.model.getJointId(f"{leg}_calf_joint"),
+        ]
 
         vcols = [self.model.joints[jid].idx_v for jid in joint_ids]
 
-        J_leg_pos_world = J_pos_world[:, vcols] 
+        J_leg_pos_world = J_pos_world[:, vcols]
 
         return J_leg_pos_world
-    
 
     def compute_3x3_foot_Jacobian_body(self, leg: str):
         foot_id = getattr(self, f"{leg}_foot_id")  # e.g. "FL_foot_id"
 
         # 6xnv Jacobian, expressed in WORLD (because of LOCAL_WORLD_ALIGNED)
         J_world = pin.getFrameJacobian(
-            self.model, self.data, foot_id,
-            pin.ReferenceFrame.LOCAL_WORLD_ALIGNED
+            self.model, self.data, foot_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED
         )
-        J_pos_world = J_world[0:3, :]          # (3 x nv)
+        J_pos_world = J_world[0:3, :]  # (3 x nv)
 
         # Base placement in world: oMb
-        oMb = self.data.oMf[self.base_id]      # SE3 of base in world
-        R_wb = oMb.rotation                    # R_WB
+        oMb = self.data.oMf[self.base_id]  # SE3 of base in world
+        R_wb = oMb.rotation  # R_WB
 
         # Rotate Jacobian into BODY (base) frame
-        J_pos_body = R_wb.T @ J_pos_world      # (3 x nv)
+        J_pos_body = R_wb.T @ J_pos_world  # (3 x nv)
 
         # Pick the 3 leg joints you care about
         joint_ids = [
@@ -329,7 +346,7 @@ class PinGo2Model:
         J_leg_pos_body = J_pos_body[:, vcols]  # (3 x 3)
 
         return J_leg_pos_body
-    
+
     def compute_Jdot_dq_world(self, leg: str):
         foot_id = getattr(self, f"{leg}_foot_id")
 
@@ -338,44 +355,41 @@ class PinGo2Model:
         # pin.computeJointJacobiansTimeVariation(self.model, self.data, q, dq)
 
         Jdot = pin.getFrameJacobianTimeVariation(
-            self.model, self.data, foot_id,
-            pin.ReferenceFrame.LOCAL_WORLD_ALIGNED
+            self.model, self.data, foot_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED
         )
         Jdot_dq = Jdot[0:3, :] @ self.current_config.get_dq()  # or store dq as self.dq
-        return np.asarray(Jdot_dq).reshape(3,)
+        return np.asarray(Jdot_dq).reshape(
+            3,
+        )
 
-    
     def compute_full_foot_Jacobian_world(self, leg: str):
         foot_id = getattr(self, f"{leg}_foot_id")  # e.g. "FL_foot_id"
 
-        J_world = pin.getFrameJacobian(self.model, self.data, foot_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED)
-        J_pos_world = J_world[0:3,:]
+        J_world = pin.getFrameJacobian(
+            self.model, self.data, foot_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED
+        )
+        J_pos_world = J_world[0:3, :]
 
         return J_pos_world
-    
+
     def compute_dynamcis_terms(self):
-        g = self.data.g           # gravity torque term (18 x 1)
-        C = self.data.C           # Coriolis matrix (18 x 18)
-        M = self.data.M           # joint-space inertia matrix (18 x 18)
+        g = self.data.g  # gravity torque term (18 x 1)
+        C = self.data.C  # Coriolis matrix (18 x 18)
+        M = self.data.M  # joint-space inertia matrix (18 x 18)
 
         return g, C, M
 
     def run_simulation(self, u_vec):
 
-        N_input = u_vec.shape[1] # Sequence of input given
+        N_input = u_vec.shape[1]  # Sequence of input given
         assert N_input == self.dynamics_N, f"Expected {N_input=} to equal {self.dynamics_N=}"
 
-        x_traj = np.zeros((12, N_input+1))
+        x_traj = np.zeros((12, N_input + 1))
         x_init = self.compute_com_x_vec()
         x_traj[:, [0]] = x_init
 
         for i in range(N_input):
-            u_i   = u_vec[:, i].reshape(-1, 1)
-            x_traj[:, i+1] = (self.Ad @ x_traj[:, [i]] + self.Bd[i] @ u_i + self.gd).flatten()
+            u_i = u_vec[:, i].reshape(-1, 1)
+            x_traj[:, i + 1] = (self.Ad @ x_traj[:, [i]] + self.Bd[i] @ u_i + self.gd).flatten()
 
         return x_init, x_traj
-
-
-
-
-

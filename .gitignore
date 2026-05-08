@@ -184,5 +184,6 @@ TODOs.md
 *.timestamp-*.mjs
 
 tmp*
+piddempc.m
 pid-de-mpc.md
 pid-de-mpc-go2.md

@@ -1,5 +1,6 @@
 {
-    "python.analysis.extraPaths": [
-        "./src/python"
-    ]
+  "python.analysis.extraPaths": ["./src/python"],
+  "cmake.ignoreCMakeListsMissing": true,
+  "python-envs.defaultEnvManager": "ms-python.python:conda",
+  "python-envs.defaultPackageManager": "ms-python.python:conda"
 }

@@ -1,7 +1,10 @@
-import numpy as np
-from .go2_robot_data import PinGo2Model
-from .gait import Gait
 from dataclasses import dataclass
+
+import numpy as np
+
+from .gait import Gait
+from .go2_robot_data import PinGo2Model
+
 
 # --------------------------------------------------------------------------------
 # Leg Controller Setting
@@ -26,19 +29,20 @@ JOINT_SLICES = {
     "RR": slice(15, 18),
 }
 
+
 @dataclass
 class LegOutput:
-    tau: np.ndarray       # shape (3,)
-    pos_des: np.ndarray   # shape (3,)
-    pos_now: np.ndarray   # shape (3,)
-    vel_des: np.ndarray   # shape (3,)
-    vel_now: np.ndarray   # shape (3,)
+    tau: np.ndarray  # shape (3,)
+    pos_des: np.ndarray  # shape (3,)
+    pos_now: np.ndarray  # shape (3,)
+    vel_des: np.ndarray  # shape (3,)
+    vel_now: np.ndarray  # shape (3,)
 
 
-class LegController():
-        
+class LegController:
+
     def __init__(self):
-            self.last_mask = np.array([2, 2, 2, 2])
+        self.last_mask = np.array([2, 2, 2, 2])
 
     def compute_leg_torque(
         self,
@@ -52,7 +56,7 @@ class LegController():
         leg_idx = LEG_INDEX[leg]
         joint_slice = JOINT_SLICES[leg]
 
-        J_foot_world = go2.compute_3x3_foot_Jacobian_world(leg)      # (3x3)
+        J_foot_world = go2.compute_3x3_foot_Jacobian_world(leg)  # (3x3)
         J_full_foot_world = go2.compute_full_foot_Jacobian_world(leg)  # (3x18)
         g, C, M = go2.compute_dynamcis_terms()
 
@@ -104,7 +108,9 @@ class LegController():
         self.last_mask[leg_idx] = current_mask[leg_idx]
 
         return LegOutput(
-            tau=tau_cmd.reshape(3,),
+            tau=tau_cmd.reshape(
+                3,
+            ),
             pos_des=foot_pos_des,
             pos_now=foot_pos_now,
             vel_des=foot_vel_des,

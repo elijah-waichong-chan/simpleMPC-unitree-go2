@@ -1,20 +1,30 @@
 """
 Demo 04: Trot rotation
 """
+
 import os
-os.environ["MPLBACKEND"] = "TkAgg"
+
+
+os.environ["MPLBACKEND"] = "Agg"
 import time
-import mujoco as mj
-import numpy as np
 from dataclasses import dataclass, field
 
-from convex_mpc.go2_robot_data import PinGo2Model
-from convex_mpc.mujoco_model import MuJoCo_GO2_Model
-from convex_mpc.com_trajectory import ComTraj
+import mujoco as mj
+import numpy as np
+
 from convex_mpc.centroidal_mpc import CentroidalMPC
-from convex_mpc.leg_controller import LegController
+from convex_mpc.com_trajectory import ComTraj
 from convex_mpc.gait import Gait
-from convex_mpc.plot_helper import plot_mpc_result, plot_swing_foot_traj, plot_solve_time, hold_until_all_fig_closed
+from convex_mpc.go2_robot_data import PinGo2Model
+from convex_mpc.leg_controller import LegController
+from convex_mpc.mujoco_model import MuJoCo_GO2_Model
+from convex_mpc.plot_helper import (
+    hold_until_all_fig_closed,
+    plot_mpc_result,
+    plot_solve_time,
+    plot_swing_foot_traj,
+)
+
 
 # --------------------------------------------------------------------------------
 # Parameters
@@ -29,6 +39,7 @@ RENDER_HZ = 120.0
 RENDER_DT = 1.0 / RENDER_HZ
 REALTIME_FACTOR = 1
 
+
 # Locomotion Command
 @dataclass
 class BodyCmdPhase:
@@ -39,11 +50,12 @@ class BodyCmdPhase:
     z_pos: float
     yaw_rate: float
 
+
 # Command format:
 #   [start_time (s), end_time (s), x_velocity (m/s), y_velocity (m/s),
 #    z_position (m), yaw_angular_velocity (rad/s)]
 CMD_SCHEDULE = [
-BodyCmdPhase(0.0, 5.0,  0.0, 0.0, 0.27, 4.0),   # Yaw rotation at 4.0 rad/s
+    BodyCmdPhase(0.0, 5.0, 0.0, 0.0, 0.27, 4.0),  # Yaw rotation at 4.0 rad/s
 ]
 
 # Gait Setting
@@ -57,12 +69,12 @@ y_vel_des_body = 0.0
 z_pos_des_body = 0.27
 yaw_rate_des_body = 0.0
 
-#MuJoCo Sim Update Rate
+# MuJoCo Sim Update Rate
 SIM_HZ = 1000
 SIM_DT = 1.0 / SIM_HZ
 
-#Leg Coontroller Update Rate
-CTRL_HZ = 200       # 200 Hz
+# Leg Coontroller Update Rate
+CTRL_HZ = 200  # 200 Hz
 CTRL_DT = 1.0 / CTRL_HZ
 
 # Must be an integer ratio for clean decimation
@@ -86,12 +98,22 @@ ABD_LIM = 23.7
 KNEE_LIM = 45.43
 SAFETY = 0.9
 
-TAU_LIM = SAFETY * np.array([
-    HIP_LIM, ABD_LIM, KNEE_LIM,   # FL: hip, thigh, calf
-    HIP_LIM, ABD_LIM, KNEE_LIM,   # FR
-    HIP_LIM, ABD_LIM, KNEE_LIM,   # RL
-    HIP_LIM, ABD_LIM, KNEE_LIM,   # RR
-])
+TAU_LIM = SAFETY * np.array(
+    [
+        HIP_LIM,
+        ABD_LIM,
+        KNEE_LIM,  # FL: hip, thigh, calf
+        HIP_LIM,
+        ABD_LIM,
+        KNEE_LIM,  # FR
+        HIP_LIM,
+        ABD_LIM,
+        KNEE_LIM,  # RL
+        HIP_LIM,
+        ABD_LIM,
+        KNEE_LIM,  # RR
+    ]
+)
 
 LEG_SLICE = {
     "FL": slice(0, 3),
@@ -99,6 +121,7 @@ LEG_SLICE = {
     "RL": slice(6, 9),
     "RR": slice(9, 12),
 }
+
 
 # --------------------------------------------------------------------------------
 # Helper Function
@@ -108,6 +131,7 @@ def get_body_cmd(t: float):
         if phase.t_start <= t < phase.t_end:
             return phase.x_vel, phase.y_vel, phase.z_pos, phase.yaw_rate
     return 0.0, 0.0, 0.27, 0.0
+
 
 # --------------------------------------------------------------------------------
 # Storage Variables (CONTROL-rate logs for plots)
@@ -127,6 +151,7 @@ tau_cmd = np.zeros((12, CTRL_STEPS))
 time_log_ctrl_s = np.zeros(CTRL_STEPS)
 q_log_ctrl = np.zeros((CTRL_STEPS, 19))
 tau_log_ctrl_Nm = np.zeros((CTRL_STEPS, 12))
+
 
 # Foot trajectory logs (control-rate)
 @dataclass
@@ -285,12 +310,12 @@ for k in range(SIM_STEPS):
 
         ctrl_i += 1
 
-    #Apply held torques at every SIM step
+    # Apply held torques at every SIM step
     mj.mj_step1(mujoco_go2.model, mujoco_go2.data)
     mujoco_go2.set_joint_torque(tau_hold)
     mj.mj_step2(mujoco_go2.model, mujoco_go2.data)
 
-    #Render-rate logging for smooth replay
+    # Render-rate logging for smooth replay
     t_after = float(mujoco_go2.data.time)
     if t_after + 1e-12 >= next_render_t:
         time_log_render.append(t_after)
@@ -320,5 +345,7 @@ time_log_render = np.asarray(time_log_render, dtype=float)
 q_log_render = np.asarray(q_log_render, dtype=float)
 tau_log_render = np.asarray(tau_log_render, dtype=float)
 
-mujoco_go2.replay_simulation(time_log_render, q_log_render, tau_log_render, RENDER_DT, REALTIME_FACTOR)
+mujoco_go2.replay_simulation(
+    time_log_render, q_log_render, tau_log_render, RENDER_DT, REALTIME_FACTOR
+)
 hold_until_all_fig_closed()

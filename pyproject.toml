@@ -1,16 +1,43 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires      = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "convex-mpc-unitree-go2"
-version = "1.0.0"
+name            = "convex-mpc"
+version         = "1.0.0"
 requires-python = ">=3.10,<3.11"
-description = "Convex MPC controller stack for Unitree Go2"
-readme = "README.md"
+description     = "Convex MPC controller stack for Unitree Go2"
+readme          = "README.md"
 
 [tool.setuptools]
-package-dir = {"" = "src"}
+package-dir = { "" = "src" }
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.black]
+line-length    = 100
+target-version = ["py310"]
+
+[tool.isort]
+atomic                 = true
+profile                = "black"
+src_paths              = ["src", "tests"]
+extra_standard_library = ["typing_extensions"]
+indent                 = 4
+lines_after_imports    = 2
+multi_line_output      = 3
+
+[tool.ruff]
+lint.select = ["C", "E", "F", "I", "W"]
+lint.ignore = ["C901", "E501", "E741", "F402", "F823"]
+lint.isort  = { lines-after-imports = 2 }
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.ruff.format]
+quote-style               = "double"
+indent-style              = "space"
+skip-magic-trailing-comma = false
+line-ending               = "auto"
